@@ -13,15 +13,15 @@ namespace Simple.Core
 {
     public class CoreService : ICoreService
     {
-        public IPerson AddPlayer(string name, PersonRole role, decimal amount)
+        public Person AddPlayer(string name, PersonRole role, decimal amount)
         {
             IPersonService personService = new PersonService();
             IBankService bankService = new BankService();
 
-            IPerson person =  personService.CreatePerson(name, role);
-            IAccount account = bankService.CreateAccount(person);
-            Data.Accounts.Add(account);
-            Data.Persons.Add(person);
+            Person person =  personService.CreatePerson(name, role);
+            Account account = bankService.CreateAccount(person);
+            Data.AccountRepository.Add(account);
+            Data.PersonRepository.Add(person);
 
             bankService.AddMoney(person, amount);
 
@@ -30,7 +30,7 @@ namespace Simple.Core
             return person;
         }
 
-        public string GetAccountReportByPerson(IPerson person)
+        public string GetAccountReportByPerson(Person person)
         {
             IBankService bankService = new BankService();
             return $"Name: {person.Name}\n" +

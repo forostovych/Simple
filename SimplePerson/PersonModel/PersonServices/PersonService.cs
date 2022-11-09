@@ -5,13 +5,13 @@ namespace Simple.PersonModel.PersonServices
 {
     public class PersonService : IPersonService
     {
-        public IPerson CreatePerson(string name, PersonRole role)
+        public Person CreatePerson(string name, PersonRole role)
         {
-            IPerson person = new Person
+            Person person = new Person
             {
                 Name = name,
                 Role = role,
-                ID = Guid.NewGuid(),
+                Id = Guid.NewGuid(),
                 GamesCount = 0,
                 WinGamesCount = 0
             };
@@ -19,13 +19,13 @@ namespace Simple.PersonModel.PersonServices
             return person;
         }
 
-        public string GetPersonReport(IPerson person)
+        public string GetPersonReport(Person person)
         {
             IBankService bankService = new BankService();
             string report = string.Empty;
             {
                 report = $"Name: {person.Name}\n";
-                report += $"ID: {person.ID}\n";
+                report += $"ID: {person.Id}\n";
                 report += $"Account ID:  {person.AccountID}\n";
                 report += $"Total Games: {person.GamesCount}\n";
                 report += $"Wins: {person.WinGamesCount}\n";

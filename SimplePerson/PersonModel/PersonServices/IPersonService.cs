@@ -5,9 +5,9 @@ namespace Simple.PersonModel.PersonServices
     public interface IPersonService
     {
 
-        IPerson CreatePerson(string name, PersonRole role);
+        Person CreatePerson(string name, PersonRole role);
 
-        string GetPersonReport(IPerson person);
+        string GetPersonReport(Person person);
 
     }
 }

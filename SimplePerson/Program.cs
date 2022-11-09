@@ -12,26 +12,22 @@ namespace SimplePerson
         {
             ICoreService coreService = new CoreService();
 
-            IPerson elena = coreService.AddPlayer("Elena", PersonRole.Player, 50000);
-            IPerson kitty = coreService.AddPlayer("Kitty", PersonRole.PlayerPro, 50000);
+            Person elena = coreService.AddPlayer("Elena", PersonRole.Player, 50000);
+            Person kitty = coreService.AddPlayer("Kitty", PersonRole.PlayerPro, 50000);
 
-            ShowAllPersonsReport(Data.Persons);
+            ShowAllPersonsReport(Data.PersonRepository.entities);
             Console.WriteLine(  );
-
 
             IBankService bankService = new BankService();
             bankService.SendMoney(elena, kitty, 15000);
 
-            ShowAllPersonsReport(Data.Persons);
-
-
-
+            ShowAllPersonsReport(Data.PersonRepository.entities);
         }
 
-        static void ShowAllPersonsReport(List<IPerson> peoples)
+        static void ShowAllPersonsReport(List<Person> peoples)
         {
             PersonService personService = new PersonService();
-            foreach (IPerson person in peoples)
+            foreach (Person person in peoples)
             {
                 Console.WriteLine(personService.GetPersonReport(person));
             }

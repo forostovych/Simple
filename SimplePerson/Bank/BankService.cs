@@ -8,9 +8,9 @@ namespace Simple.Bank
 {
     public class BankService : IBankService
     {
-        public void AddMoney(IPerson person, decimal amount)
+        public void AddMoney(Person person, decimal amount)
         {
-            IAccount account = GetAccountByPerson(person);
+            Account account = GetAccountByPerson(person);
 
             ITransaction newtransaction = new Transaction()
             {
@@ -24,88 +24,88 @@ namespace Simple.Bank
             account.Transactions.Add(newtransaction);
         }
 
-        public IAccount CreateAccount(IPerson person)
+        public Account CreateAccount(Person person)
         {
-            IAccount account = new Account()
+            Account account = new Account()
             {
-                AccountID = Guid.NewGuid(),
-                PersonID = person.ID,
+                Id = Guid.NewGuid(),
+                PersonID = person.Id,
                 Transactions = new List<ITransaction>()
                 {
                     new Transaction()
                     {
                         Data = DateTime.Now,
-                        FromID = person.ID,
-                        ToID = person.ID,
+                        FromID = person.Id,
+                        ToID = person.Id,
                         TransactionAmonut = 0,
                         Description = string.Empty
                     }
                 }
             };
-            person.AccountID = account.AccountID;
+            person.AccountID = account.Id;
 
             return account;
         }
-        public string CreateTransaction(IPerson personFrom, IPerson personTo, decimal amount)
+        public string CreateTransaction(Person personFrom, Person personTo, decimal amount)
         {
-            IAccount accountFrom = GetAccountByPerson(personFrom);
+            Account accountFrom = GetAccountByPerson(personFrom);
             if (!IsEnougfMoney(personFrom, amount))
                 return TransactionStatus.Reject.ToString();
 
 
-            IAccount accountTo = GetAccountByPerson(personTo);
+            Account accountTo = GetAccountByPerson(personTo);
 
             SendMoney(personFrom, personTo, amount);
 
             return TransactionStatus.Success.ToString();
         }
-        public void SendMoney(IPerson From, IPerson TO, decimal amount)
+        public void SendMoney(Person From, Person TO, decimal amount)
         {
-            IAccount accountFrom = GetAccountByPerson(From);
-            IAccount accountTo = GetAccountByPerson(TO);
+            Account accountFrom = GetAccountByPerson(From);
+            Account accountTo = GetAccountByPerson(TO);
 
             accountFrom.Transactions.Add (SendMoneyFrom(accountFrom, accountTo, amount));
             accountTo.Transactions.Add( SendMoneyTo(accountFrom, accountTo, amount));
         }
-        private ITransaction SendMoneyFrom(IAccount accountFrom, IAccount accountTO, decimal amount)
+        private ITransaction SendMoneyFrom(Account accountFrom, Account accountTO, decimal amount)
         {
             ITransaction transaction =  new Transaction()
             {
                 Data = DateTime.Now,
-                FromID = accountFrom.AccountID,
-                ToID = accountTO.AccountID,
+                FromID = accountFrom.Id,
+                ToID = accountTO.Id,
                 TransactionAmonut = amount * -1,
                 Description = string.Empty
             };
 
             return transaction;
         }
-        private ITransaction SendMoneyTo(IAccount accountFrom, IAccount accountTO, decimal amount)
+        private ITransaction SendMoneyTo(Account accountFrom, Account accountTO, decimal amount)
         {
             ITransaction transaction = new Transaction()
             {
                 Data = DateTime.Now,
-                FromID = accountTO.AccountID,
-                ToID = accountFrom.AccountID,
+                FromID = accountTO.Id,
+                ToID = accountFrom.Id,
                 TransactionAmonut = amount,
                 Description = string.Empty
             };
 
             return transaction;
         }
-        public IAccount GetAccountByPerson(IPerson person)
+        public Account GetAccountByPerson(Person person)
         {
-            return Data.Accounts.Where(x => x.AccountID.Equals(person.AccountID)).FirstOrDefault();
+            return Data.AccountRepository.entities.Where(x => x.Id.Equals(person.AccountID)).FirstOrDefault();
         }
-        public decimal GetMoneyAmount(IAccount account)
+        public decimal GetMoneyAmount(Account account)
         {
             return account.Transactions.Select(x => x.TransactionAmonut).Sum();
         }
-        public bool IsEnougfMoney(IPerson account, decimal amount)
+        public bool IsEnougfMoney(Person account, decimal amount)
         {
             return GetMoneyAmount(GetAccountByPerson(account)) >= amount;
         }
-        public decimal GetMoneyAmountByPerson(IPerson person)
+        public decimal GetMoneyAmountByPerson(Person person)
         {
             return GetMoneyAmount(GetAccountByPerson(person));
         }

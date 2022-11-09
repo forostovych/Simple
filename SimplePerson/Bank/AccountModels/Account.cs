@@ -2,9 +2,8 @@
 
 namespace Simple.Bank.AccountModels
 {
-    public class Account : IAccount
+    public class Account : BaseModel
     {
-        public Guid AccountID { get; set; }
         public Guid PersonID { get; set; }
         public List<ITransaction>? Transactions { get; set; }
     }

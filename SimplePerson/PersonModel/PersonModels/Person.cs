@@ -1,9 +1,9 @@
-﻿namespace Simple.PersonModel.PersonModels
-{
-    public class Person : IPerson
-    {
+﻿using Simple.Bank;
 
-        public Guid ID { get; set; }
+namespace Simple.PersonModel.PersonModels
+{
+    public class Person : BaseModel
+    {
         public Guid AccountID { get; set; }
         public string Name { get; set; }
         public int WinGamesCount { get; set; }
