@@ -1,4 +1,5 @@
-﻿using Simple.PersonModel.PersonModels;
+﻿using Simple.Bank;
+using Simple.PersonModel.PersonModels;
 
 namespace Simple.PersonModel.PersonServices
 {
@@ -20,6 +21,7 @@ namespace Simple.PersonModel.PersonServices
 
         public string GetPersonReport(IPerson person)
         {
+            IBankService bankService = new BankService();
             string report = string.Empty;
             {
                 report = $"Name: {person.Name}\n";
@@ -28,6 +30,7 @@ namespace Simple.PersonModel.PersonServices
                 report += $"Total Games: {person.GamesCount}\n";
                 report += $"Wins: {person.WinGamesCount}\n";
                 report += $"Role: {person.Role}\n";
+                report += $"Money Amount {bankService.GetMoneyAmountByPerson(person)}\n";
             }
 
             return report;

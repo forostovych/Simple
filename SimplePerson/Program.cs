@@ -1,5 +1,8 @@
-﻿using Simple.PersonModel.PersonModels;
+﻿using Simple.Bank;
+using Simple.Core;
+using Simple.PersonModel.PersonModels;
 using Simple.PersonModel.PersonServices;
+using Simple.Repository;
 
 namespace SimplePerson
 {
@@ -7,22 +10,25 @@ namespace SimplePerson
     {
         static void Main()
         {
+            ICoreService coreService = new CoreService();
 
-            List<IPerson> peoples = new List<IPerson>();
-            PersonService personService = new PersonService();
+            IPerson elena = coreService.AddPlayer("Elena", PersonRole.Player, 50000);
+            IPerson kitty = coreService.AddPlayer("Kitty", PersonRole.PlayerPro, 50000);
 
-            peoples.Add(personService.CreatePerson("Bonya", PersonRole.PlayerPro));
-            peoples.Add(personService.CreatePerson("Tomas", PersonRole.Player));
-            peoples.Add(personService.CreatePerson("Simba", PersonRole.Administrator));
-            peoples.Add(personService.CreatePerson("Slava", PersonRole.Administrator));
+            ShowAllPersonsReport(Data.Persons);
+            Console.WriteLine(  );
 
 
-            ShowAllPersons(peoples);
+            IBankService bankService = new BankService();
+            bankService.SendMoney(elena, kitty, 15000);
+
+            ShowAllPersonsReport(Data.Persons);
+
 
 
         }
 
-        static void ShowAllPersons(List<IPerson> peoples)
+        static void ShowAllPersonsReport(List<IPerson> peoples)
         {
             PersonService personService = new PersonService();
             foreach (IPerson person in peoples)

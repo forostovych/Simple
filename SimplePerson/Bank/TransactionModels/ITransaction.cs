@@ -2,7 +2,7 @@
 {
     public interface ITransaction
     {
-        DateTime Deta { get; set; }
+        DateTime Data { get; set; }
         Guid FromID { get; set; }
         Guid ToID { get; set; }
         decimal TransactionAmonut { get; set; }
