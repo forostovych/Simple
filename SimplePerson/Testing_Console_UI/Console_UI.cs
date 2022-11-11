@@ -117,5 +117,9 @@ namespace Simple.Testing_Console_UI
             return cardRankValue;
         }
 
+        public void ShowTransactionReport(string transactionStatus)
+        {
+            Console.WriteLine($"Transaction status: [{transactionStatus}]");
+        }
     }
 }

@@ -1,7 +1,6 @@
-﻿using Simple.CardTable.CardDeckModel;
-using Simple.CardTableModel.CardModel;
+﻿using Simple.CardTableModel.CardModel;
 
-namespace Simple.CardTable.CardModel
+namespace Simple.CardTable.CardDeckModel
 {
     public class CardDeckService : ICardDeckService
     {

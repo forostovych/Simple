@@ -1,7 +1,6 @@
 ﻿using Simple.Bank;
 using Simple.Bank.AccountModels;
 using Simple.CardTable.CardDeckModel;
-using Simple.CardTable.CardModel;
 using Simple.CardTable.CardTableModel;
 using Simple.Core;
 using Simple.PersonModel.PersonModels;
@@ -18,13 +17,18 @@ namespace Simple.CardTable
     {
         public CardPlayer CreateCardPlayer(string name, decimal amount, PersonRole role = PersonRole.Player)
         {
+            CardPlayer cardPlayer = new CardPlayer();
+
             IPersonService personService = new PersonService();
             IBankService bankService = new BankService();
             ICardDeckService ICardDeck = new CardDeckService();
-            CardPlayer cardPlayer = new CardPlayer();
+
+
             cardPlayer.Person = personService.CreatePerson(name, role);
             cardPlayer.Account = bankService.CreateAccount(cardPlayer.Person);
             cardPlayer.Person.AccountID = cardPlayer.Account.Id;
+
+
 
             Data.AccountRepository.Add(cardPlayer.Account);
             Data.PersonRepository.Add(cardPlayer.Person);

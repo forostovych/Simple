@@ -1,10 +1,6 @@
-﻿using Simple;
-using Simple.Bank;
+﻿using Simple.Bank;
 using Simple.CardTable;
 using Simple.CardTable.CardDeckModel;
-using Simple.CardTable.CardModel;
-using Simple.CardTable.CardTableModel;
-using Simple.Core;
 using Simple.PersonModel.PersonModels;
 using Simple.PersonModel.PersonServices;
 using Simple.Testing_Console_UI;
@@ -15,44 +11,34 @@ namespace Simple
     {
         static void Main()
         {
+
             ICardTableService cardTableService = new CardTableService();
             IBankService bankService = new BankService();
             ICardDeckService cardDeckService = new CardDeckService();
-            IConsole_UI UI = new Console_UI();
 
             CardDeck TableCardDeck = cardDeckService.GetCardDeck(1);
 
-            var CardPlayerIrina = cardTableService.CreateCardPlayer("Irina", 45000);
-            var CardPlayerMiroslav = cardTableService.CreateCardPlayer("Miroslav", 45000);
+            var CardPlayerSlava = cardTableService.CreateCardPlayer("Slava", 10000);
+            var CardPlayerValera = cardTableService.CreateCardPlayer("Valera", 45000);
 
-            bankService.SendMoney(CardPlayerIrina.Person, CardPlayerMiroslav.Person, 15000);
 
             for (int i = 0; i < 6; i++)
             {
-
-                (TableCardDeck, CardPlayerIrina.CardDeck) = cardDeckService.MoveCards(TableCardDeck, CardPlayerIrina.CardDeck, 1);
-                (TableCardDeck, CardPlayerMiroslav.CardDeck) = cardDeckService.MoveCards(TableCardDeck, CardPlayerMiroslav.CardDeck, 1);
-
+                (TableCardDeck, CardPlayerSlava.CardDeck) = cardDeckService.MoveCards(TableCardDeck, CardPlayerSlava.CardDeck, 1);
+                (TableCardDeck, CardPlayerValera.CardDeck) = cardDeckService.MoveCards(TableCardDeck, CardPlayerValera.CardDeck, 1);
             }
 
-            UI.ShowCardDeck(TableCardDeck);
-            UI.ShowCardPlayerInfo(CardPlayerIrina);
-            UI.ShowCardPlayerInfo(CardPlayerMiroslav);
-
-
-            bankService.SendMoney(CardPlayerIrina.Person, CardPlayerMiroslav.Person, 15000);
-
-            for (int i = 0; i < 6; i++)
-            {
-
-                (TableCardDeck, CardPlayerIrina.CardDeck) = cardDeckService.MoveCards(TableCardDeck, CardPlayerIrina.CardDeck, 1);
-                (TableCardDeck, CardPlayerMiroslav.CardDeck) = cardDeckService.MoveCards(TableCardDeck, CardPlayerMiroslav.CardDeck, 1);
-
-            }
+            IConsole_UI UI = new Console_UI();
 
             UI.ShowCardDeck(TableCardDeck);
-            UI.ShowCardPlayerInfo(CardPlayerIrina);
-            UI.ShowCardPlayerInfo(CardPlayerMiroslav);
+            UI.ShowCardPlayerInfo(CardPlayerSlava);
+            UI.ShowCardPlayerInfo(CardPlayerValera);
+            var transactionStatus = bankService.SendMoney(CardPlayerSlava.Person, CardPlayerValera.Person, 15000);
+            UI.ShowTransactionReport(transactionStatus);
+            UI.ShowCardPlayerInfo(CardPlayerSlava);
+            UI.ShowCardPlayerInfo(CardPlayerValera);
+            
+
         }
 
         static void ShowAllPersonsReport(List<Person> peoples)

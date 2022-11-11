@@ -1,6 +1,6 @@
 ﻿using Simple.CardTable.CardDeckModel;
 
-namespace Simple.CardTable.CardModel
+namespace Simple.CardTable
 {
     public interface ICardDeckService
     {

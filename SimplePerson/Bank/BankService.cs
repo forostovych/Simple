@@ -3,6 +3,7 @@ using Simple.Bank.TransactionModels;
 using Simple.PersonModel.PersonModels;
 using Simple;
 using Simple.Bank;
+using Simple.Testing_Console_UI;
 
 namespace Simple.Bank
 {
@@ -49,21 +50,27 @@ namespace Simple.Bank
         public string CreateTransaction(Person personFrom, Person personTo, decimal amount)
         {
             Account accountFrom = GetAccountByPerson(personFrom);
-            if (!IsEnougfMoney(personFrom, amount))
+            if (!IsEnoughMoney(personFrom, amount))
+            {
+                
                 return TransactionStatus.Reject.ToString();
+            }
 
             Account accountTo = GetAccountByPerson(personTo);
             SendMoney(personFrom, personTo, amount);
 
             return TransactionStatus.Success.ToString();
         }
-        public void SendMoney(Person From, Person TO, decimal amount)
+        public string SendMoney(Person From, Person TO, decimal amount)
         {
-            Account accountFrom = GetAccountByPerson(From);
+            /*Account accountFrom = GetAccountByPerson(From);
             Account accountTo = GetAccountByPerson(TO);
 
             accountFrom.Transactions.Add (SendMoneyFrom(accountFrom, accountTo, amount));
-            accountTo.Transactions.Add( SendMoneyTo(accountFrom, accountTo, amount));
+            accountTo.Transactions.Add( SendMoneyTo(accountFrom, accountTo, amount));*/
+
+            return $"" +
+                $"{CreateTransaction(From, TO, amount)}";
         }
         private Transaction SendMoneyFrom(Account accountFrom, Account accountTO, decimal amount)
         {
@@ -99,7 +106,7 @@ namespace Simple.Bank
         {
             return account.Transactions.Select(x => x.TransactionAmonut).Sum();
         }
-        public bool IsEnougfMoney(Person account, decimal amount)
+        public bool IsEnoughMoney(Person account, decimal amount)
         {
             return GetMoneyAmount(GetAccountByPerson(account)) >= amount;
         }
