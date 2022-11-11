@@ -119,7 +119,15 @@ namespace Simple.Testing_Console_UI
 
         public void ShowTransactionReport(string transactionStatus)
         {
-            Console.WriteLine($"Transaction status: [{transactionStatus}]");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine(new string('=', 120));
+            Console.Write($"Transaction: [");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write($"{transactionStatus}");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("]");
+            Console.WriteLine(new string('=', 120) + "\n");
+            Console.ResetColor();
         }
     }
 }

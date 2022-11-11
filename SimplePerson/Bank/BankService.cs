@@ -49,28 +49,27 @@ namespace Simple.Bank
         }
         public string CreateTransaction(Person personFrom, Person personTo, decimal amount)
         {
-            Account accountFrom = GetAccountByPerson(personFrom);
             if (!IsEnoughMoney(personFrom, amount))
             {
-                
                 return TransactionStatus.Reject.ToString();
             }
-
+            Account accountFrom = GetAccountByPerson(personFrom);
             Account accountTo = GetAccountByPerson(personTo);
-            SendMoney(personFrom, personTo, amount);
+            accountFrom.Transactions.Add(SendMoneyFrom(accountFrom, accountTo, amount));
+            accountTo.Transactions.Add(SendMoneyTo(accountFrom, accountTo, amount));
 
             return TransactionStatus.Success.ToString();
         }
         public string SendMoney(Person From, Person TO, decimal amount)
         {
-            /*Account accountFrom = GetAccountByPerson(From);
-            Account accountTo = GetAccountByPerson(TO);
-
-            accountFrom.Transactions.Add (SendMoneyFrom(accountFrom, accountTo, amount));
-            accountTo.Transactions.Add( SendMoneyTo(accountFrom, accountTo, amount));*/
+            string transactionReport = CreateTransaction(From, TO, amount);
 
             return $"" +
-                $"{CreateTransaction(From, TO, amount)}";
+                $"|| Sender: [{From.Name}] ||" +
+                $" Amount: [~ {amount}$ ~] ||" +
+                $" Getter: [{TO.Name}] ||" +
+                $" Status: ==[{transactionReport}]==";
+
         }
         private Transaction SendMoneyFrom(Account accountFrom, Account accountTO, decimal amount)
         {

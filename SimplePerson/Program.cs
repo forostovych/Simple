@@ -18,7 +18,7 @@ namespace Simple
 
             CardDeck TableCardDeck = cardDeckService.GetCardDeck(1);
 
-            var CardPlayerSlava = cardTableService.CreateCardPlayer("Slava", 10000);
+            var CardPlayerSlava = cardTableService.CreateCardPlayer("Slava", 50000);
             var CardPlayerValera = cardTableService.CreateCardPlayer("Valera", 45000);
 
 
