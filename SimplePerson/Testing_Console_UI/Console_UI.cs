@@ -14,19 +14,41 @@ namespace Simple.Testing_Console_UI
                 ShowCard(card);
                 Console.WriteLine();
             }
+            Console.WriteLine();
+
             Console.ForegroundColor = ConsoleColor.White;
         }
         public void ShowPlayerCardDeck(CardDeck deck, Person person)
         {
-            foreach (var card in deck.Cards)
+            ShowPlayerName(person.Name);
+            Console.Write("Cards: [ ");
+            ShowCardDeckInHand(deck.Cards);
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine(" ]");
+            Console.WriteLine();
+        }
+        private void ShowPlayerName(string name)
+        {
+            Console.Write($"Player: [");
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.Write($"Player: {name}");
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine("]");
+        }
+        private void ShowCardDeckInHand(Queue<Card> cards)
+        {
+            var Listcards = cards.ToList();
+
+            for (int i = 0; i < Listcards.Count; i++)
             {
-                ShowCard(card);
+                ShowCard(Listcards[i]);
                 var memColor = Console.ForegroundColor;
                 Console.ForegroundColor = ConsoleColor.Green;
+                if (i == Listcards.Count - 1) { break; }
                 Console.Write("|");
-                Console.ForegroundColor= memColor;
+                Console.ForegroundColor = memColor;
             }
-            Console.ForegroundColor = ConsoleColor.White;
+
         }
         private void ShowCard(Card card)
         {

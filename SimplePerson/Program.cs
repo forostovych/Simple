@@ -14,25 +14,28 @@ namespace Simple
         static void Main()
         {
             ICoreService coreService = new CoreService();
-            Person elena = coreService.AddPlayer("Elena", PersonRole.Player, 50000);
-            Person kitty = coreService.AddPlayer("Kitty", PersonRole.PlayerPro, 50000);
-            ShowAllPersonsReport(Data.PersonRepository.entities);
-            Console.WriteLine();
             IBankService bankService = new BankService();
-            bankService.SendMoney(elena, kitty, 15000);
-            ShowAllPersonsReport(Data.PersonRepository.entities);
-
             ICardDeckService ICardDeck = new CardDeckService();
             IConsole_UI UI = new Console_UI();
 
+            Person elena = coreService.AddPlayer("Elena", 50000);
+            Person kitty = coreService.AddPlayer("Kitty", 50000, PersonRole.PlayerPro);
+
+            bankService.SendMoney(elena, kitty, 15000);
+
+
             CardDeck cardsDeck_Desk = ICardDeck.GetCardDeck(2);
             CardDeck cardsPlayer = ICardDeck.GetCardDeck(0);
+            CardDeck cardsPlayer2 = ICardDeck.GetCardDeck(0);
+
 
             (cardsDeck_Desk, cardsPlayer) = ICardDeck.MoveCards(cardsDeck_Desk, cardsPlayer, 6);
+            (cardsDeck_Desk, cardsPlayer2) = ICardDeck.MoveCards(cardsDeck_Desk, cardsPlayer2, 6);
 
 
             UI.ShowCardDeck(cardsDeck_Desk);
             UI.ShowPlayerCardDeck(cardsPlayer, kitty);
+            UI.ShowPlayerCardDeck(cardsPlayer2, elena);
 
         }
 

@@ -2,18 +2,12 @@
 using Simple.Bank.AccountModels;
 using Simple.PersonModel.PersonModels;
 using Simple.PersonModel.PersonServices;
-using Simple;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Simple.Core
 {
     public class CoreService : ICoreService
     {
-        public Person AddPlayer(string name, PersonRole role, decimal amount)
+        public Person AddPlayer(string name, decimal amount, PersonRole role = PersonRole.Player)
         {
             IPersonService personService = new PersonService();
             IBankService bankService = new BankService();
@@ -22,10 +16,7 @@ namespace Simple.Core
             Account account = bankService.CreateAccount(person);
             Data.AccountRepository.Add(account);
             Data.PersonRepository.Add(person);
-
             bankService.AddMoney(person, amount);
-
-
 
             return person;
         }
