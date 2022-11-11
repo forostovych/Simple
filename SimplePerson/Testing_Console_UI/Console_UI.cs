@@ -1,5 +1,8 @@
 ﻿using System;
+using Simple.Bank;
+using Simple.Bank.AccountModels;
 using Simple.CardTable.CardDeckModel;
+using Simple.CardTable.CardTableModel;
 using Simple.CardTableModel.CardModel;
 using Simple.PersonModel.PersonModels;
 
@@ -7,6 +10,18 @@ namespace Simple.Testing_Console_UI
 {
     public class Console_UI : IConsole_UI
     {
+        public void ShowCardPlayerInfo(CardPlayer cardPlayer)
+        {
+            ShowPlayerCardDeck(cardPlayer.CardDeck, cardPlayer.Person);
+            ShowCardPlayerAccount(cardPlayer.Account);
+        }
+
+        private void ShowCardPlayerAccount(Account account)
+        {
+            IBankService bankService = new BankService();
+            Console.WriteLine($"Money Amount: [ {bankService.GetMoneyAmount(account)} ]\n");
+        }
+
         public void ShowCardDeck(CardDeck deck)
         {
             foreach (var card in deck.Cards)
@@ -25,15 +40,14 @@ namespace Simple.Testing_Console_UI
             ShowCardDeckInHand(deck.Cards);
             Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine(" ]");
-            Console.WriteLine();
         }
         private void ShowPlayerName(string name)
         {
-            Console.Write($"Player: [");
+            Console.Write($"Player: [ ");
             Console.ForegroundColor = ConsoleColor.Blue;
-            Console.Write($"Player: {name}");
+            Console.Write($"{name}");
             Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine("]");
+            Console.WriteLine(" ]");
         }
         private void ShowCardDeckInHand(Queue<Card> cards)
         {

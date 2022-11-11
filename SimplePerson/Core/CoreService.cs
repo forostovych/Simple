@@ -1,5 +1,7 @@
 ﻿using Simple.Bank;
 using Simple.Bank.AccountModels;
+using Simple.CardTable.CardDeckModel;
+using Simple.CardTable.CardModel;
 using Simple.PersonModel.PersonModels;
 using Simple.PersonModel.PersonServices;
 
@@ -14,6 +16,7 @@ namespace Simple.Core
 
             Person person = personService.CreatePerson(name, role);
             Account account = bankService.CreateAccount(person);
+
             Data.AccountRepository.Add(account);
             Data.PersonRepository.Add(person);
             bankService.AddMoney(person, amount);

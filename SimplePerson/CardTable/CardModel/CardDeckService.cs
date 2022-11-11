@@ -22,6 +22,7 @@ namespace Simple.CardTable.CardModel
                 NewcardDeck.Cards.Enqueue(new Card(Ranks.Joker, Suits.Joker));
                 NewcardDeck.Cards.Enqueue(new Card(Ranks.Joker, Suits.Joker));
             }
+            NewcardDeck.Id = Guid.NewGuid();
 
             return NewcardDeck;
         }
