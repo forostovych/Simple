@@ -1,7 +1,7 @@
 ﻿using Simple.Bank.AccountModels;
 using Simple.Bank.TransactionModels;
 using Simple.PersonModel.PersonModels;
-using Simple.Repository;
+using Simple;
 using Simple.Bank;
 
 namespace Simple.Bank
@@ -12,7 +12,7 @@ namespace Simple.Bank
         {
             Account account = GetAccountByPerson(person);
 
-            ITransaction newtransaction = new Transaction()
+            Transaction newtransaction = new Transaction()
             {
                 Data = DateTime.Now,
                 FromID = Guid.NewGuid(),
@@ -30,7 +30,7 @@ namespace Simple.Bank
             {
                 Id = Guid.NewGuid(),
                 PersonID = person.Id,
-                Transactions = new List<ITransaction>()
+                Transactions = new List<Transaction>()
                 {
                     new Transaction()
                     {
@@ -52,9 +52,7 @@ namespace Simple.Bank
             if (!IsEnougfMoney(personFrom, amount))
                 return TransactionStatus.Reject.ToString();
 
-
             Account accountTo = GetAccountByPerson(personTo);
-
             SendMoney(personFrom, personTo, amount);
 
             return TransactionStatus.Success.ToString();
@@ -67,9 +65,9 @@ namespace Simple.Bank
             accountFrom.Transactions.Add (SendMoneyFrom(accountFrom, accountTo, amount));
             accountTo.Transactions.Add( SendMoneyTo(accountFrom, accountTo, amount));
         }
-        private ITransaction SendMoneyFrom(Account accountFrom, Account accountTO, decimal amount)
+        private Transaction SendMoneyFrom(Account accountFrom, Account accountTO, decimal amount)
         {
-            ITransaction transaction =  new Transaction()
+            Transaction transaction =  new Transaction()
             {
                 Data = DateTime.Now,
                 FromID = accountFrom.Id,
@@ -80,9 +78,9 @@ namespace Simple.Bank
 
             return transaction;
         }
-        private ITransaction SendMoneyTo(Account accountFrom, Account accountTO, decimal amount)
+        private Transaction SendMoneyTo(Account accountFrom, Account accountTO, decimal amount)
         {
-            ITransaction transaction = new Transaction()
+            Transaction transaction = new Transaction()
             {
                 Data = DateTime.Now,
                 FromID = accountTO.Id,

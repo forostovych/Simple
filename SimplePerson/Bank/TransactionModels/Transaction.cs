@@ -1,6 +1,6 @@
 ﻿namespace Simple.Bank.TransactionModels
 {
-    public class Transaction : ITransaction
+    public class Transaction : BaseModel
     {
         public DateTime Data { get; set; }
         public Guid FromID { get; set; }

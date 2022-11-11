@@ -2,7 +2,7 @@
 using Simple.Bank.AccountModels;
 using Simple.PersonModel.PersonModels;
 using Simple.PersonModel.PersonServices;
-using Simple.Repository;
+using Simple;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +18,7 @@ namespace Simple.Core
             IPersonService personService = new PersonService();
             IBankService bankService = new BankService();
 
-            Person person =  personService.CreatePerson(name, role);
+            Person person = personService.CreatePerson(name, role);
             Account account = bankService.CreateAccount(person);
             Data.AccountRepository.Add(account);
             Data.PersonRepository.Add(person);
