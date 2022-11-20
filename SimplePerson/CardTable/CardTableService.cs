@@ -66,7 +66,40 @@ namespace Simple.CardTable
                 cardsWeight += ConvertCardToCardWeight(card);
             }
 
+            if (cardsWeight > 21)
+            {
+                cardsWeight = 0;
+                foreach (var card in cardDeck.Cards)
+                {
+                    cardsWeight += ConvertCardToCardWeightOverkill(card);
+                }
+            }
             return cardsWeight;
+        }
+
+        private int ConvertCardToCardWeightOverkill(Card card)
+        {
+            int cardRankValue;
+
+            switch (card.Rank)
+            {
+                case Ranks.A: cardRankValue = 1; break;
+                case Ranks.K: cardRankValue = 10; break;
+                case Ranks.Q: cardRankValue = 10; break;
+                case Ranks.J: cardRankValue = 10; break;
+                case Ranks.Ten: cardRankValue = 10; break;
+                case Ranks.Nine: cardRankValue = 9; break;
+                case Ranks.Eight: cardRankValue = 8; break;
+                case Ranks.Seven: cardRankValue = 7; break;
+                case Ranks.Six: cardRankValue = 6; break;
+                case Ranks.Five: cardRankValue = 5; break;
+                case Ranks.Four: cardRankValue = 4; break;
+                case Ranks.Three: cardRankValue = 3; break;
+                case Ranks.Two: cardRankValue = 2; break;
+                default: cardRankValue = 0; break;
+            }
+
+            return cardRankValue;
         }
 
         private int ConvertCardToCardWeight(Card card)

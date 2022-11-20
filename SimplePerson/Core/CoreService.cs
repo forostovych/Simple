@@ -48,6 +48,7 @@ namespace Simple.Core
 
         private void ShowInfoAllPlayers()
         {
+            Console.Clear();
             IConsole_UI UI = new Console_UI();
 
             foreach (var cardPlayer in CardDesk.CardPlayers)
@@ -55,5 +56,6 @@ namespace Simple.Core
                 UI.ShowCardPlayerInfo(cardPlayer);
             }
         }
+
     }
 }

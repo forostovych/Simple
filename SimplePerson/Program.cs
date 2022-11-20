@@ -11,14 +11,10 @@ namespace Simple
     {
         static void Main()
         {
-
             //SimplStartScenario();
 
             ICoreService Game = new CoreService();
-            Game.StartGame(3);
-
-
-
+            Game.StartGame(2);
 
 
         }
