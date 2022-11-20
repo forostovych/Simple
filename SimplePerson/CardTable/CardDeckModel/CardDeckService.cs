@@ -18,8 +18,8 @@ namespace Simple.CardTable.CardDeckModel
                         NewcardDeck.Cards.Enqueue(new Card((Ranks)r, (Suits)s));
                     }
                 }
-                NewcardDeck.Cards.Enqueue(new Card(Ranks.Joker, Suits.Joker));
-                NewcardDeck.Cards.Enqueue(new Card(Ranks.Joker, Suits.Joker));
+                //NewcardDeck.Cards.Enqueue(new Card(Ranks.Joker, Suits.Joker));
+                //NewcardDeck.Cards.Enqueue(new Card(Ranks.Joker, Suits.Joker));
             }
             NewcardDeck.Id = Guid.NewGuid();
 

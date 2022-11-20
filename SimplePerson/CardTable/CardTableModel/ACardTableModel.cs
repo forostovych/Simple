@@ -14,5 +14,6 @@ namespace Simple.CardTable.CardTableModel
         public Person Person { get; set; }
         public Account Account { get; set; }
         public CardDeck CardDeck { get; set; }
+        public int PlayerBank {  get; set; }
     }
 }

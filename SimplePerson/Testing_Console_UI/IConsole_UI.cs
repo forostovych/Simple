@@ -15,5 +15,9 @@ namespace Simple.Testing_Console_UI
         void ShowCardDeck(CardDeck deck);
         public void ShowPlayerCardDeck(CardDeck deck, Person person);
         void ShowTransactionReport(string transactionStatus);
+        int GetCountPlayers();
+        List<string> GetPlayerNames(int playersCount);
+        void ShowWellcomeMessage();
+        int GetStartMoneyAmount();
     }
 }

@@ -19,7 +19,7 @@
         Diamonds,                   // Бубна    '♦'     U+2666
         Clubs,                      // Трефа    '♣'     U+2663
         Spades,                      // Пика    '♠'     U+2660 
-        Joker
+        //Joker
     }
 
     public enum Ranks               // 12 Ranks and Joker
@@ -37,7 +37,6 @@
         Q,
         K,
         A,
-        Joker
-
+        //Joker
     }
 }
