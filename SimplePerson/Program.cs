@@ -3,8 +3,6 @@ using Simple.CardTable;
 using Simple.CardTable.CardDeckModel;
 using Simple.CardTable.CardTableModel;
 using Simple.Core;
-using Simple.PersonModel.PersonModels;
-using Simple.PersonModel.PersonServices;
 using Simple.Testing_Console_UI;
 
 namespace Simple
@@ -14,10 +12,10 @@ namespace Simple
         static void Main()
         {
 
-            SimplStartScenario();
+            //SimplStartScenario();
 
-            //ICoreService Game = new CoreService();
-            //Game.StartGame(3);
+            ICoreService Game = new CoreService();
+            Game.StartGame(3);
 
 
 

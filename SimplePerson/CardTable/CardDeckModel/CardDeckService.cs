@@ -46,5 +46,19 @@ namespace Simple.CardTable.CardDeckModel
             }
             return (cardDeckFrom, cardDeckTo);
         }
+
+        private CardDeck ShaffleCardDeck(Queue<Card> cards)
+        {
+            CardDeck cardDeck = new CardDeck()
+            {
+                Cards = new Queue<Card>()
+            };
+
+            var shuffledCards = cards.OrderBy(_ => new Random().Next()).ToList();
+            for (int i = 0; i < shuffledCards.Count - 1; i++)
+                cardDeck.Cards.Enqueue(shuffledCards[i]);
+
+            return cardDeck;
+        }
     }
 }
