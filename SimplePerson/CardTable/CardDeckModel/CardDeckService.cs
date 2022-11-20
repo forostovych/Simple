@@ -23,7 +23,7 @@ namespace Simple.CardTable.CardDeckModel
             }
             NewcardDeck.Id = Guid.NewGuid();
 
-            return NewcardDeck;
+            return ShaffleCardDeck(NewcardDeck.Cards);
         }
 
         public CardDeck GetCardDeck(int count)
