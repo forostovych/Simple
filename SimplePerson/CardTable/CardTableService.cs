@@ -6,6 +6,7 @@ using Simple.CardTableModel.CardModel;
 using Simple.Core;
 using Simple.PersonModel.PersonModels;
 using Simple.PersonModel.PersonServices;
+using Simple.Testing_Console_UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,17 +41,17 @@ namespace Simple.CardTable
 
         private void AddPlayerToDesk(CardPlayer cardPlayer)
         {
-            CardDesk.CardPlayers.Add(cardPlayer);
+            CardTableModel.CardTable.CardPlayers.Add(cardPlayer);
         }
 
         public void DealCardsToPlayers(int numberOfCads)
         {
             ICardDeckService ICardDeck = new CardDeckService();                             //      Add Interface CardDeckService
-            var TableCardDeck = CardDesk.TableCardDeck = ICardDeck.GetCardDeck(4);
+            var TableCardDeck = CardTableModel.CardTable.TableCardDeck = ICardDeck.GetCardDeck(4);
 
             for (int i = 0;  i < numberOfCads; i++)
             {
-                foreach (var cardPlayer in CardDesk.CardPlayers)
+                foreach (var cardPlayer in CardTableModel.CardTable.CardPlayers)
                 {
                     (TableCardDeck, cardPlayer.CardDeck) = ICardDeck.MoveCards(TableCardDeck, cardPlayer.CardDeck, 1);
                 }
@@ -127,5 +128,29 @@ namespace Simple.CardTable
             return cardRankValue;
         }
 
+        public object PlayerController(CardPlayer cardPlayer)
+        {
+
+
+            IConsole_UI UI = new Console_UI();
+            UI.ShowUIMessage("Make your choice!");
+            UI.ShowUIMessage(userSwitchers);
+            int userCintrolInput = UI.GetChoiseFromUser(GetSwitchers());
+
+
+
+
+        }
+
+        private string GetSwitchers()
+        {
+            string resSwitchers = string.Empty;
+            for (int i = 0; i < Enum.GetValues(typeof(UserSelector)).Length;  i++)
+            {
+                resSwitchers += $"{i+1} [" + (UserSelector)i + "]\t";
+            }
+
+            return resSwitchers;
+        }
     }
 }

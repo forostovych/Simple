@@ -1,11 +1,6 @@
 ﻿using Simple.CardTable.CardDeckModel;
 using Simple.CardTable.CardTableModel;
 using Simple.PersonModel.PersonModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Simple.CardTable
 {
@@ -15,5 +10,6 @@ namespace Simple.CardTable
         void DealCardsToPlayers(int numberOfCads);
 
         int CalculateCardsWeight(CardDeck cardDeck);
+        object PlayerController(CardPlayer cardPlayer);
     }
 }

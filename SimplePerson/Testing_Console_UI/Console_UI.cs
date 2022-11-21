@@ -282,5 +282,32 @@ namespace Simple.Testing_Console_UI
 
             return count;
         }
+
+        public void Clear()
+        {
+            Console.Clear();
+            Console.ResetColor();
+        }
+
+        public void ShowUIMessage(string text)
+        {
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine(new string('=', 40));
+            Console.WriteLine($"[ {text} ]");
+            Console.WriteLine(new string('=', 40));
+            Console.ResetColor();
+        }
+
+        public int GetChoiseMoveFromUser(string text, int length)
+        {
+            ShowUIMessage(text);
+            
+            while (true)
+            {
+                string userInput = Console.ReadLine();
+                if (IsInteger(userInput) )
+
+            }
+        }
     }
 }

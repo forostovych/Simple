@@ -19,5 +19,8 @@ namespace Simple.Testing_Console_UI
         List<string> GetPlayerNames(int playersCount);
         void ShowWellcomeMessage();
         int GetStartMoneyAmount();
+        void Clear();
+        void ShowUIMessage(string text);
+        int GetChoiseFromUser();
     }
 }

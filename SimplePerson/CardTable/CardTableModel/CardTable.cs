@@ -7,10 +7,22 @@ using System.Threading.Tasks;
 
 namespace Simple.CardTable.CardTableModel
 {
-    public class CardDesk
+
+
+    public class CardTable
     {
         public static List<CardPlayer> CardPlayers { get; set; } = new List<CardPlayer>();
 
         public static CardDeck TableCardDeck { get; set; } = new CardDeck();
+    }
+
+    public enum UserSelector
+    {
+
+        Hit,                //      GetCard
+        Stand,              //      Enough
+        Double,             //      Double bet
+        Surrender           //      Surrender
+
     }
 }

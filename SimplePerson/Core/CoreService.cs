@@ -40,9 +40,27 @@ namespace Simple.Core
 
 
             GetPlayersFromUserConsole();
-            tableService.DealCardsToPlayers(countCardDeks);
 
-            ShowInfoAllPlayers();
+
+            while (true)
+            {
+                ShowNewGame();
+
+                tableService.DealCardsToPlayers(countCardDeks);
+                ShowInfoAllPlayers();
+            }
+
+
+        }
+
+        private void ShowNewGame()
+        {
+            ICardTableService tableService = new CardTableService();
+            IConsole_UI UI = new Console_UI();
+            UI.Clear();                                                 //      Clear All
+
+            var user = tableService.PlayerController(CardTable.CardTableModel.CardTable.CardPlayers[0]);
+            
 
         }
 
@@ -51,7 +69,8 @@ namespace Simple.Core
             Console.Clear();
             IConsole_UI UI = new Console_UI();
 
-            foreach (var cardPlayer in CardDesk.CardPlayers)
+
+            foreach (var cardPlayer in CardTable.CardTableModel.CardTable.CardPlayers)
             {
                 UI.ShowCardPlayerInfo(cardPlayer);
             }
