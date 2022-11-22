@@ -308,7 +308,7 @@ namespace Simple.Testing_Console_UI
             int iterator = Enum.GetValues(typeof(UserSelector)).Length;
             for (int i = 0; i < iterator; i++)
             {
-                result += $"{(i+1)} [{(UserSelector)i}]\n";
+                result += $"{(i + 1)} [{(UserSelector)i}]\n";
             }
 
             return result;
