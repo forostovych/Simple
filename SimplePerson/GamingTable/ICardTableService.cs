@@ -1,8 +1,8 @@
-﻿using Simple.CardTable.CardDeckModel;
-using Simple.CardTable.CardTableModel;
+﻿using Simple.GamingTable.CardDeckModel;
+using Simple.GamingTable.CardTableModel;
 using Simple.PersonModel.PersonModels;
 
-namespace Simple.CardTable
+namespace Simple.GamingTable
 {
     public interface ICardTableService
     {
@@ -10,7 +10,8 @@ namespace Simple.CardTable
         CardPlayer CreateCardPlayer(string name, decimal amount, PersonRole role = PersonRole.Player);
         void DealCardsToPlayers(int numberOfCads);
         int CalculateCardsWeight(CardDeck cardDeck);
-        public UserSelector AskUserSelection(UserSelector UserSelector);
+        UserSelector AskUserSelection();
+        void DoActionByUserSelection(UserSelector select, CardPlayer player);
 
     }
 }

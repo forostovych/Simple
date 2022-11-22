@@ -1,9 +1,9 @@
 ﻿using Simple.Bank;
 using Simple.Bank.AccountModels;
-using Simple.CardTable;
-using Simple.CardTable.CardDeckModel;
-using Simple.CardTable.CardTableModel;
+using Simple.GamingTable;
 using Simple.CardTableModel.CardModel;
+using Simple.GamingTable.CardDeckModel;
+using Simple.GamingTable.CardTableModel;
 using Simple.PersonModel.PersonModels;
 
 namespace Simple.Testing_Console_UI
@@ -282,24 +282,26 @@ namespace Simple.Testing_Console_UI
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine(new string('=', 40));
-            Console.WriteLine($"[ {text} ]");
+            Console.WriteLine($"{text}");
             Console.WriteLine(new string('=', 40));
             Console.ResetColor();
         }
 
         public UserSelector GetSelectorFromUser()
         {
-            ShowUIMessage(ConvertEnumToUIString());
 
             while (true)
             {
+                ShowUIMessage(ConvertEnumToUIString());
                 string result = Console.ReadLine();
-                if (IsInteger(result) && int.Parse(result) > 0 && int.Parse(result) < Enum.GetValues(typeof(UserSelector)).Length)
+                if (IsInteger(result) && int.Parse(result) > 0 && int.Parse(result) < Enum.GetValues(typeof(UserSelector)).Length + 1)
                 {
                     return (UserSelector)(int.Parse(result) - 1);
                 }
-            }
+                ShowUIMessage("Error!");
+                Thread.Sleep(500);
 
+            }
         }
 
         private string ConvertEnumToUIString()

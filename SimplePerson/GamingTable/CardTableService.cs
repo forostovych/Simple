@@ -1,13 +1,12 @@
 ﻿using Simple.Bank;
-using Simple.CardTable.CardDeckModel;
-using Simple.CardTable.CardTableModel;
+using Simple.GamingTable.CardDeckModel;
+using Simple.GamingTable.CardTableModel;
 using Simple.CardTableModel.CardModel;
 using Simple.PersonModel.PersonModels;
 using Simple.PersonModel.PersonServices;
 using Simple.Testing_Console_UI;
-using System.Net.Http.Headers;
 
-namespace Simple.CardTable
+namespace Simple.GamingTable
 {
     public class CardTableService : ICardTableService
     {
@@ -50,6 +49,15 @@ namespace Simple.CardTable
             }
 
         }
+
+        public void DealCardToPlayer(CardPlayer cardPlayer)
+        {
+            ICardDeckService ICardDeck = new CardDeckService();                             //      Add Interface CardDeckService
+
+            (CardTable.TableCardDeck, cardPlayer.CardDeck) = ICardDeck.MoveCards(CardTable.TableCardDeck, cardPlayer.CardDeck, 1);
+
+        }
+
         public int CalculateCardsWeight(CardDeck cardDeck)
         {
             int cardsWeight = 0;
@@ -116,11 +124,43 @@ namespace Simple.CardTable
 
             return cardRankValue;
         }
-
-        public UserSelector AskUserSelection(UserSelector userSelector)
+        public UserSelector AskUserSelection()
         {
             IConsole_UI UI = new Console_UI();
             return UI.GetSelectorFromUser();
+        }
+
+        public void DoActionByUserSelection(UserSelector select, CardPlayer player)
+        {
+            switch (select)
+            {
+                case UserSelector.Hit: DoHit(player); break;
+                case UserSelector.Stand: DoStand(player); break;
+                case UserSelector.Double: DoDouble(player); break;
+                case UserSelector.Surrender: DoSurrender(player); break;
+
+                default: break;
+            }
+        }
+
+        private void DoSurrender(CardPlayer player)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void DoDouble(CardPlayer player)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void DoStand(CardPlayer player)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void DoHit(CardPlayer player)
+        {
+            DealCardToPlayer(player);
         }
     }
 }

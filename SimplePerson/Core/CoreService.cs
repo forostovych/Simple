@@ -1,5 +1,5 @@
-﻿using Simple.CardTable;
-using Simple.CardTable.CardTableModel;
+﻿using Simple.GamingTable;
+using Simple.GamingTable.CardTableModel;
 using Simple.Testing_Console_UI;
 
 namespace Simple.Core
@@ -30,22 +30,37 @@ namespace Simple.Core
         {
 
             ICardTableService cardTableService = new CardTableService();                                //      Add Interface TableService
-            CardPlayer CardPlayerSlava = cardTableService.CreateCardPlayer(name, startMoney);           //      Create Player One
+            cardTableService.CreateCardPlayer(name, startMoney);           //      Create Player One
 
         }
 
         public void StartGame(int countCardDeks)
         {
-            ICardTableService tableService = new CardTableService();
+            ICardTableService CardTableService = new CardTableService();
+            IConsole_UI UI = new Console_UI();
+            GetPlayersFromUserConsole();                                    //           Create a game by User Input.  Select Count of players, money Amount fnd PlayerNames
 
-            GetPlayersFromUserConsole();
+            UI.GetBetFromPlayer(CardTable.CardPlayers[0]);
+            CardTableService.DealCardsToPlayers(countCardDeks);             //           Deal Cards too Players
+            ShowInfoAllPlayers();                                           //          Show all info
+
+            var userSelection = CardTableService.AskUserSelection();        //          Ask Player about next move.
+            //Hit,                //      GetCard
+            //Stand,              //      Enough
+            //Double,             //      Double bet
+            //Surrender           //      Surrender
+            UI.ShowUIMessage("[ " + userSelection.ToString() + "]");                     //          Show some info
+
+
+            CardTableService.DoActionByUserSelection(userSelection, CardTable.CardPlayers[0]);
+            ShowInfoAllPlayers();                                         //          Show all info
+
+            //ShowNewGame();
 
             while (true)
             {
-                ShowNewGame();
 
-                tableService.DealCardsToPlayers(countCardDeks);
-                ShowInfoAllPlayers();
+
             }
 
         }
@@ -56,7 +71,7 @@ namespace Simple.Core
             IConsole_UI UI = new Console_UI();
             UI.Clear();                                                 //      Clear All
 
-            var user = tableService.PlayerController(CardTable.CardTableModel.CardTable.CardPlayers[0]);
+            //var user = tableService.PlayerController(CardTable.CardTableModel.CardTable.CardPlayers[0]);
 
         }
 
@@ -66,7 +81,7 @@ namespace Simple.Core
             IConsole_UI UI = new Console_UI();
 
 
-            foreach (var cardPlayer in CardTable.CardTableModel.CardTable.CardPlayers)
+            foreach (var cardPlayer in GamingTable.CardTableModel.CardTable.CardPlayers)
             {
                 UI.ShowCardPlayerInfo(cardPlayer);
             }

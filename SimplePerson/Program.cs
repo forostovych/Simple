@@ -1,7 +1,7 @@
 ﻿using Simple.Bank;
-using Simple.CardTable;
-using Simple.CardTable.CardDeckModel;
-using Simple.CardTable.CardTableModel;
+using Simple.GamingTable;
+using Simple.GamingTable.CardDeckModel;
+using Simple.GamingTable.CardTableModel;
 using Simple.Core;
 using Simple.Testing_Console_UI;
 

@@ -1,7 +1,7 @@
 ﻿using Simple.Bank;
 using Simple.CardTableModel.CardModel;
 
-namespace Simple.CardTable.CardDeckModel
+namespace Simple.GamingTable.CardDeckModel
 {
     public class CardDeck : BaseModel
     {

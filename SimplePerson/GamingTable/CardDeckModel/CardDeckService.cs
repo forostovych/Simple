@@ -1,6 +1,6 @@
 ﻿using Simple.CardTableModel.CardModel;
 
-namespace Simple.CardTable.CardDeckModel
+namespace Simple.GamingTable.CardDeckModel
 {
     public class CardDeckService : ICardDeckService
     {
