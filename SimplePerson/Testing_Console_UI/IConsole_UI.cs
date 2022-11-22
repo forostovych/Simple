@@ -21,6 +21,6 @@ namespace Simple.Testing_Console_UI
         int GetStartMoneyAmount();
         void Clear();
         void ShowUIMessage(string text);
-        int GetChoiseFromUser();
+        UserSelector GetSelectorFromUser();
     }
 }

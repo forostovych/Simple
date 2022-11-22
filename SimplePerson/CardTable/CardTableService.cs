@@ -1,17 +1,11 @@
 ﻿using Simple.Bank;
-using Simple.Bank.AccountModels;
 using Simple.CardTable.CardDeckModel;
 using Simple.CardTable.CardTableModel;
 using Simple.CardTableModel.CardModel;
-using Simple.Core;
 using Simple.PersonModel.PersonModels;
 using Simple.PersonModel.PersonServices;
 using Simple.Testing_Console_UI;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Net.Http.Headers;
 
 namespace Simple.CardTable
 {
@@ -38,18 +32,16 @@ namespace Simple.CardTable
             AddPlayerToDesk(cardPlayer);
             return cardPlayer;
         }
-
         private void AddPlayerToDesk(CardPlayer cardPlayer)
         {
             CardTableModel.CardTable.CardPlayers.Add(cardPlayer);
         }
-
         public void DealCardsToPlayers(int numberOfCads)
         {
             ICardDeckService ICardDeck = new CardDeckService();                             //      Add Interface CardDeckService
             var TableCardDeck = CardTableModel.CardTable.TableCardDeck = ICardDeck.GetCardDeck(4);
 
-            for (int i = 0;  i < numberOfCads; i++)
+            for (int i = 0; i < numberOfCads; i++)
             {
                 foreach (var cardPlayer in CardTableModel.CardTable.CardPlayers)
                 {
@@ -58,7 +50,6 @@ namespace Simple.CardTable
             }
 
         }
-
         public int CalculateCardsWeight(CardDeck cardDeck)
         {
             int cardsWeight = 0;
@@ -77,7 +68,6 @@ namespace Simple.CardTable
             }
             return cardsWeight;
         }
-
         private int ConvertCardToCardWeightOverkill(Card card)
         {
             int cardRankValue;
@@ -102,7 +92,6 @@ namespace Simple.CardTable
 
             return cardRankValue;
         }
-
         private int ConvertCardToCardWeight(Card card)
         {
             int cardRankValue;
@@ -122,35 +111,16 @@ namespace Simple.CardTable
                 case Ranks.Four: cardRankValue = 4; break;
                 case Ranks.Three: cardRankValue = 3; break;
                 case Ranks.Two: cardRankValue = 2; break;
-                    default: cardRankValue = 0; break;
+                default: cardRankValue = 0; break;
             }
 
             return cardRankValue;
         }
 
-        public object PlayerController(CardPlayer cardPlayer)
+        public UserSelector AskUserSelection(UserSelector userSelector)
         {
-
-
             IConsole_UI UI = new Console_UI();
-            UI.ShowUIMessage("Make your choice!");
-            UI.ShowUIMessage(userSwitchers);
-            int userCintrolInput = UI.GetChoiseFromUser(GetSwitchers());
-
-
-
-
-        }
-
-        private string GetSwitchers()
-        {
-            string resSwitchers = string.Empty;
-            for (int i = 0; i < Enum.GetValues(typeof(UserSelector)).Length;  i++)
-            {
-                resSwitchers += $"{i+1} [" + (UserSelector)i + "]\t";
-            }
-
-            return resSwitchers;
+            return UI.GetSelectorFromUser();
         }
     }
 }

@@ -16,13 +16,5 @@ namespace Simple.CardTable.CardTableModel
         public static CardDeck TableCardDeck { get; set; } = new CardDeck();
     }
 
-    public enum UserSelector
-    {
 
-        Hit,                //      GetCard
-        Stand,              //      Enough
-        Double,             //      Double bet
-        Surrender           //      Surrender
-
-    }
 }

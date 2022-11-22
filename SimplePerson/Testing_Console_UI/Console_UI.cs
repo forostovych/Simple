@@ -179,22 +179,11 @@ namespace Simple.Testing_Console_UI
             return count;
         }
 
-        private bool IsInteger(string value)
-        {
-            if (int.TryParse(value, out int res))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
+        private bool IsInteger(string value) => int.TryParse(value, out int res);
 
         public List<string> GetPlayerNames(int countPlayers)
         {
             List<string> names = new List<string>();
-
             for (int i = 0; i < countPlayers; i++)
             {
                 names.Add(GetNameFromUser(i + 1));
@@ -298,16 +287,33 @@ namespace Simple.Testing_Console_UI
             Console.ResetColor();
         }
 
-        public int GetChoiseMoveFromUser(string text, int length)
+        public UserSelector GetSelectorFromUser()
         {
-            ShowUIMessage(text);
-            
+            ShowUIMessage(ConvertEnumToUIString());
+
             while (true)
             {
-                string userInput = Console.ReadLine();
-                if (IsInteger(userInput) )
-
+                string result = Console.ReadLine();
+                if (IsInteger(result) && int.Parse(result) > 0 && int.Parse(result) < Enum.GetValues(typeof(UserSelector)).Length)
+                {
+                    return (UserSelector)(int.Parse(result) - 1);
+                }
             }
+
         }
+
+        private string ConvertEnumToUIString()
+        {
+            string result = string.Empty;
+            int iterator = Enum.GetValues(typeof(UserSelector)).Length;
+            for (int i = 0; i < iterator; i++)
+            {
+                result += $"{(i+1)} [{(UserSelector)i}]\n";
+            }
+
+            return result;
+        }
+
+
     }
 }

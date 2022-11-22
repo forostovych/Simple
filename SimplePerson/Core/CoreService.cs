@@ -38,9 +38,7 @@ namespace Simple.Core
         {
             ICardTableService tableService = new CardTableService();
 
-
             GetPlayersFromUserConsole();
-
 
             while (true)
             {
@@ -49,7 +47,6 @@ namespace Simple.Core
                 tableService.DealCardsToPlayers(countCardDeks);
                 ShowInfoAllPlayers();
             }
-
 
         }
 
@@ -60,7 +57,6 @@ namespace Simple.Core
             UI.Clear();                                                 //      Clear All
 
             var user = tableService.PlayerController(CardTable.CardTableModel.CardTable.CardPlayers[0]);
-            
 
         }
 
