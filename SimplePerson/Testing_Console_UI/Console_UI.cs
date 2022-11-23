@@ -45,7 +45,7 @@ namespace Simple.Testing_Console_UI
             Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine(" ]");
             var weightOfCards = tableService.CalculateCardsWeight(deck);
-            Console.Write($"Cards Points: [ ");
+            Console.Write($"Card Points: [ ");
 
             Console.ForegroundColor = ConsoleColor.Red;
             Console.Write($"{(weightOfCards)}");
@@ -316,6 +316,34 @@ namespace Simple.Testing_Console_UI
             return result;
         }
 
+        public void GetPlayersBet(int startAmount)
+        {
+            int count = 0;
+            string inputResult = string.Empty;
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write("Please enter the bet amount: ");
+
+            while (true)
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                inputResult = Console.ReadLine();
+                if (IsInteger(inputResult) && int.Parse(inputResult) <= (startAmount / 10))
+                {
+                    CardTable.DeskBet = int.Parse(inputResult);
+                    Console.WriteLine($"The bet amount is: [ {inputResult}$ ] - ok.\n");
+                    Console.ForegroundColor = ConsoleColor.White;
+                    break;
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Erorr!");
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.Write($"Please enter a betting amount between 1$ and {startAmount / 10}$: ");
+                }
+            }
+
+        }
 
     }
 }

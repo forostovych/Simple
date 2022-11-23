@@ -17,5 +17,6 @@ namespace Simple.Testing_Console_UI
         void Clear();
         void ShowUIMessage(string text);
         UserSelector GetSelectorFromUser();
+        void GetPlayersBet(int startAmount);
     }
 }

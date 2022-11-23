@@ -12,6 +12,7 @@ namespace Simple.GamingTable
         int CalculateCardsWeight(CardDeck cardDeck);
         UserSelector AskUserSelection();
         void DoActionByUserSelection(UserSelector select, CardPlayer player);
-
+        void TakeMoneyFromPlayer(CardPlayer player, decimal amount);
+        void TakeBetFromPlayers();
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Simple.GamingTable;
 using Simple.GamingTable.CardTableModel;
+using Simple.PersonModel.PersonModels;
 using Simple.Testing_Console_UI;
 
 namespace Simple.Core
@@ -13,6 +14,7 @@ namespace Simple.Core
             UI.ShowWellcomeMessage();
             int playersCount = UI.GetCountPlayers();
             int startMoneyAmount = UI.GetStartMoneyAmount();
+            UI.GetPlayersBet(startMoneyAmount);
             List<string> playerNames = UI.GetPlayerNames(playersCount);
 
             AddPlayersToTable(playerNames, startMoneyAmount);
@@ -38,18 +40,16 @@ namespace Simple.Core
         {
             ICardTableService CardTableService = new CardTableService();
             IConsole_UI UI = new Console_UI();
-            GetPlayersFromUserConsole();                                    //           Create a game by User Input.  Select Count of players, money Amount fnd PlayerNames
+            GetPlayersFromUserConsole();                                    //          Create a game by User Input.  Select Count of players, money Amount fnd PlayerNames
 
-            UI.GetBetFromPlayer(CardTable.CardPlayers[0]);
-            CardTableService.DealCardsToPlayers(countCardDeks);             //           Deal Cards too Players
+            CardTableService.TakeBetFromPlayers();                          //          Take away the first bet
+            CardTableService.DealCardsToPlayers(countCardDeks);             //          Deal Cards too Players
             ShowInfoAllPlayers();                                           //          Show all info
 
             var userSelection = CardTableService.AskUserSelection();        //          Ask Player about next move.
-            //Hit,                //      GetCard
-            //Stand,              //      Enough
-            //Double,             //      Double bet
-            //Surrender           //      Surrender
-            UI.ShowUIMessage("[ " + userSelection.ToString() + "]");                     //          Show some info
+
+
+            UI.ShowUIMessage("[ " + userSelection.ToString() + "]");        //          Show some info
 
 
             CardTableService.DoActionByUserSelection(userSelection, CardTable.CardPlayers[0]);
@@ -72,7 +72,6 @@ namespace Simple.Core
             UI.Clear();                                                 //      Clear All
 
             //var user = tableService.PlayerController(CardTable.CardTableModel.CardTable.CardPlayers[0]);
-
         }
 
         private void ShowInfoAllPlayers()
@@ -80,8 +79,7 @@ namespace Simple.Core
             Console.Clear();
             IConsole_UI UI = new Console_UI();
 
-
-            foreach (var cardPlayer in GamingTable.CardTableModel.CardTable.CardPlayers)
+            foreach (var cardPlayer in CardTable.CardPlayers)
             {
                 UI.ShowCardPlayerInfo(cardPlayer);
             }

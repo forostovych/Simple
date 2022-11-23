@@ -5,6 +5,8 @@ using Simple.CardTableModel.CardModel;
 using Simple.PersonModel.PersonModels;
 using Simple.PersonModel.PersonServices;
 using Simple.Testing_Console_UI;
+using System.Numerics;
+using Simple.Bank.AccountModels;
 
 namespace Simple.GamingTable
 {
@@ -35,19 +37,32 @@ namespace Simple.GamingTable
         {
             CardTableModel.CardTable.CardPlayers.Add(cardPlayer);
         }
-        public void DealCardsToPlayers(int numberOfCads)
+        public void DealCardsToPlayers(int numberOfCards)
         {
             ICardDeckService ICardDeck = new CardDeckService();                             //      Add Interface CardDeckService
             var TableCardDeck = CardTableModel.CardTable.TableCardDeck = ICardDeck.GetCardDeck(4);
 
-            for (int i = 0; i < numberOfCads; i++)
+            for (int i = 0; i < numberOfCards; i++)
             {
                 foreach (var cardPlayer in CardTableModel.CardTable.CardPlayers)
                 {
                     (TableCardDeck, cardPlayer.CardDeck) = ICardDeck.MoveCards(TableCardDeck, cardPlayer.CardDeck, 1);
                 }
             }
+        }
 
+        public void TakeBetFromPlayers()
+        {
+            decimal bet = (decimal)CardTable.DeskBet;
+            foreach (CardPlayer player in CardTable.CardPlayers)
+            {
+                TakeMoneyFromPlayer(player, bet);
+            }
+        }
+        public void TakeMoneyFromPlayer(CardPlayer player, decimal amount)
+        {
+            IBankService BS = new BankService();
+            BS.RemoveMoney(player.Person, amount);
         }
 
         public void DealCardToPlayer(CardPlayer cardPlayer)
@@ -162,5 +177,7 @@ namespace Simple.GamingTable
         {
             DealCardToPlayer(player);
         }
+
+
     }
 }

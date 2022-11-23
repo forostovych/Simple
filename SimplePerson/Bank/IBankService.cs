@@ -14,5 +14,6 @@ namespace Simple.Bank
         string SendMoney(Person From, Person TO, decimal amount);
         decimal GetMoneyAmountByPerson(Person person);
         void AddMoney(Person person, decimal amount);
+        void RemoveMoney(Person person, decimal amount);
     }
 }
