@@ -13,6 +13,7 @@ namespace Simple.GamingTable
         UserSelector AskUserSelection();
         void DoActionByUserSelection(UserSelector select, CardPlayer player);
         void TakeMoneyFromPlayer(CardPlayer player, decimal amount);
-        void TakeBetFromPlayers();
+        void RemoveBetFromPlayers();
+        void AskAllPlayersNextMove(int countCards);
     }
 }

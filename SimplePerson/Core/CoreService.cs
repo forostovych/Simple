@@ -36,33 +36,37 @@ namespace Simple.Core
 
         }
 
-        public void StartGame(int countCardDeks)
+        public void StartGame(int countCards)
         {
-            ICardTableService CardTableService = new CardTableService();
             IConsole_UI UI = new Console_UI();
             GetPlayersFromUserConsole();                                    //          Create a game by User Input.  Select Count of players, money Amount fnd PlayerNames
+            ICardTableService CardTableService = new CardTableService();
 
-            CardTableService.TakeBetFromPlayers();                          //          Take away the first bet
-            CardTableService.DealCardsToPlayers(countCardDeks);             //          Deal Cards too Players
+            //ICardTableService.CreateNewGame();
+
+            CardTableService.RemoveBetFromPlayers();                          //          Take away the first bet
+            CardTableService.DealCardsToPlayers(countCards);             //          Deal Cards too Players
             ShowInfoAllPlayers();                                           //          Show all info
 
             var userSelection = CardTableService.AskUserSelection();        //          Ask Player about next move.
-
-
             UI.ShowUIMessage("[ " + userSelection.ToString() + "]");        //          Show some info
-
-
             CardTableService.DoActionByUserSelection(userSelection, CardTable.CardPlayers[0]);
             ShowInfoAllPlayers();                                         //          Show all info
 
             //ShowNewGame();
 
+            ////    ======
+            ICardTableService CTS = new CardTableService();
             while (true)
             {
+                CTS.RemoveBetFromPlayers();                         //          Take away the first bet
+                CTS.DealCardsToPlayers(countCards);              //          Deal Cards too Players
+                ShowInfoAllPlayers();                               //          Show all info
+                CTS.AskAllPlayersNextMove(countCards);
 
 
             }
-
+            ////    ======
         }
 
         private void ShowNewGame()

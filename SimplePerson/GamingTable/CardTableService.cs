@@ -51,7 +51,7 @@ namespace Simple.GamingTable
             }
         }
 
-        public void TakeBetFromPlayers()
+        public void RemoveBetFromPlayers()
         {
             decimal bet = (decimal)CardTable.DeskBet;
             foreach (CardPlayer player in CardTable.CardPlayers)
@@ -178,6 +178,31 @@ namespace Simple.GamingTable
             DealCardToPlayer(player);
         }
 
+        public void AskAllPlayersNextMove(int countCards)
+        {
+            ICardTableService CTS = new CardTableService();
+            IConsole_UI UI = new Console_UI();
 
+            CTS.RemoveBetFromPlayers();                         //          Take away the first bet
+
+
+            for (int i = 0; i < CardTable.CardPlayers.Count; i++)
+            {
+                while (true)
+                {
+                    UI.ShowCardPlayerInfo(CardTable.CardPlayers[i]);                    //          Show some info.
+                    CardTable.CardPlayers[i].UserSelect = AskUserSelection();                             //          Ask Player about next move.
+                    if (CardTable.CardPlayers[i].UserSelect == UserSelector.Surrender)
+                    {
+                        break;
+                    }
+                    else if (CardTable.CardPlayers[i].UserSelect == UserSelector.Stand)
+                    {
+
+                    }
+                    DoActionByUserSelection(CardTable.CardPlayers[i].UserSelect, CardTable.CardPlayers[i]);   //          Do some Action.
+                }
+            }
+        }
     }
 }
