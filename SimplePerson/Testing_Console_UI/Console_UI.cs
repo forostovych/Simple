@@ -16,13 +16,11 @@ namespace Simple.Testing_Console_UI
             ShowPlayerCardDeck(cardPlayer.CardDeck, cardPlayer.Person);
             ShowCardPlayerAccount(cardPlayer.Account);
         }
-
         private void ShowCardPlayerAccount(Account account)
         {
             IBankService bankService = new BankService();
             Console.WriteLine($"Money Amount: [ {bankService.GetMoneyAmount(account)} ]\n");
         }
-
         public void ShowCardDeck(CardDeck deck)
         {
             foreach (var card in deck.Cards)
@@ -34,7 +32,6 @@ namespace Simple.Testing_Console_UI
 
             Console.ForegroundColor = ConsoleColor.White;
         }
-
         public void ShowPlayerCardDeck(CardDeck deck, Person person)
         {
             ICardTableService tableService = new CardTableService();
@@ -53,7 +50,6 @@ namespace Simple.Testing_Console_UI
             Console.WriteLine(" ]");
 
         }
-
         private void ShowPlayerName(string name)
         {
             Console.Write($"Player: [ ");
@@ -62,7 +58,6 @@ namespace Simple.Testing_Console_UI
             Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine(" ]");
         }
-
         private void ShowCardDeckInHand(Queue<Card> cards)
         {
             var Listcards = cards.ToList();
@@ -78,14 +73,12 @@ namespace Simple.Testing_Console_UI
             }
 
         }
-
         private void ShowCard(Card card)
         {
             Console.ForegroundColor = GetCardSuitColor(card);
             Console.Write($"{GetCardSuitChar(card)}");
             Console.Write($"{GetCardRankValue(card)}");
         }
-
         private ConsoleColor GetCardSuitColor(Card card)
         {
             switch (card.Suit)
@@ -98,7 +91,6 @@ namespace Simple.Testing_Console_UI
                 default: return ConsoleColor.White;
             }
         }
-
         private char GetCardSuitChar(Card card)
         {
             char cardSuitChar = (char)card.Suit;
@@ -114,7 +106,6 @@ namespace Simple.Testing_Console_UI
 
             return cardSuitChar;
         }
-
         private string GetCardRankValue(Card card)
         {
             string cardRankValue = string.Empty;
@@ -134,7 +125,6 @@ namespace Simple.Testing_Console_UI
 
             return cardRankValue;
         }
-
         public void ShowTransactionReport(string transactionStatus)
         {
             Console.ForegroundColor = ConsoleColor.Green;
@@ -147,8 +137,7 @@ namespace Simple.Testing_Console_UI
             Console.WriteLine(new string('=', 120) + "\n");
             Console.ResetColor();
         }
-
-        public int GetCountPlayers()
+        public int InitializePlayersCount()
         {
             int count = 0;
             string inputResult = string.Empty;
@@ -178,9 +167,7 @@ namespace Simple.Testing_Console_UI
 
             return count;
         }
-
         private bool IsInteger(string value) => int.TryParse(value, out int res);
-
         public List<string> GetPlayerNames(int countPlayers)
         {
             List<string> names = new List<string>();
@@ -191,7 +178,6 @@ namespace Simple.Testing_Console_UI
 
             return names;
         }
-
         private string GetNameFromUser(int i)
         {
             while (true)
@@ -217,7 +203,6 @@ namespace Simple.Testing_Console_UI
             }
 
         }
-
         private string ConvertNumberToText(int i)
         {
             switch (i)
@@ -231,8 +216,7 @@ namespace Simple.Testing_Console_UI
                 default: return "";
             }
         }
-
-        public void ShowWellcomeMessage()
+        public void ShowWelcomeMessage()
         {
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine($"{new string('=', 50)}");
@@ -241,8 +225,7 @@ namespace Simple.Testing_Console_UI
             Console.ResetColor();
             Console.WriteLine();
         }
-
-        public int GetStartMoneyAmount()
+        public int InitializeStartMoneyAmount()
         {
             int count = 0;
             string inputResult = string.Empty;
@@ -271,13 +254,11 @@ namespace Simple.Testing_Console_UI
 
             return count;
         }
-
         public void Clear()
         {
             Console.Clear();
             Console.ResetColor();
         }
-
         public void ShowUIMessage(string text)
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
@@ -286,7 +267,6 @@ namespace Simple.Testing_Console_UI
             Console.WriteLine(new string('=', 40));
             Console.ResetColor();
         }
-
         public UserSelector GetSelectorFromUser()
         {
 
@@ -303,7 +283,6 @@ namespace Simple.Testing_Console_UI
 
             }
         }
-
         private string ConvertEnumToUIString()
         {
             string result = string.Empty;
@@ -315,8 +294,7 @@ namespace Simple.Testing_Console_UI
 
             return result;
         }
-
-        public void GetPlayersBet(int startAmount)
+        public void InitializePlayersBet(int startAmount)
         {
             int count = 0;
             string inputResult = string.Empty;

@@ -50,7 +50,6 @@ namespace Simple.GamingTable
                 }
             }
         }
-
         public void RemoveBetFromPlayers()
         {
             decimal bet = (decimal)CardTable.DeskBet;
@@ -64,15 +63,11 @@ namespace Simple.GamingTable
             IBankService BS = new BankService();
             BS.RemoveMoney(player.Person, amount);
         }
-
         public void DealCardToPlayer(CardPlayer cardPlayer)
         {
             ICardDeckService ICardDeck = new CardDeckService();                             //      Add Interface CardDeckService
-
             (CardTable.TableCardDeck, cardPlayer.CardDeck) = ICardDeck.MoveCards(CardTable.TableCardDeck, cardPlayer.CardDeck, 1);
-
         }
-
         public int CalculateCardsWeight(CardDeck cardDeck)
         {
             int cardsWeight = 0;
@@ -144,52 +139,47 @@ namespace Simple.GamingTable
             IConsole_UI UI = new Console_UI();
             return UI.GetSelectorFromUser();
         }
-
         public void DoActionByUserSelection(UserSelector select, CardPlayer player)
         {
             switch (select)
             {
-                case UserSelector.Hit: DoHit(player); break;
-                case UserSelector.Stand: DoStand(player); break;
-                case UserSelector.Double: DoDouble(player); break;
-                case UserSelector.Surrender: DoSurrender(player); break;
+                case UserSelector.Hit: DoHit(player); break;                // true
+                case UserSelector.Stand: DoStand(player); break;            // false
+                case UserSelector.Double: DoDouble(player); break;          // false
+                case UserSelector.Surrender: DoSurrender(player); break;    // 
 
                 default: break;
             }
         }
-
         private void DoSurrender(CardPlayer player)
         {
             throw new NotImplementedException();
         }
-
         private void DoDouble(CardPlayer player)
         {
             throw new NotImplementedException();
         }
-
         private void DoStand(CardPlayer player)
         {
             throw new NotImplementedException();
         }
-
         private void DoHit(CardPlayer player)
         {
             DealCardToPlayer(player);
         }
+
 
         public void AskAllPlayersNextMove(int countCards)
         {
             ICardTableService CTS = new CardTableService();
             IConsole_UI UI = new Console_UI();
 
-            CTS.RemoveBetFromPlayers();                         //          Take away the first bet
-
 
             for (int i = 0; i < CardTable.CardPlayers.Count; i++)
             {
                 while (true)
                 {
+                    UI.Clear();
                     UI.ShowCardPlayerInfo(CardTable.CardPlayers[i]);                    //          Show some info.
                     CardTable.CardPlayers[i].UserSelect = AskUserSelection();                             //          Ask Player about next move.
                     if (CardTable.CardPlayers[i].UserSelect == UserSelector.Surrender)

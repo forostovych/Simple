@@ -11,9 +11,9 @@ namespace Simple.GamingTable.CardDeckModel
 
             for (int i = 0; i < countDeck; i++)
             {
-                for (int s = 0; s < Enum.GetValues(typeof(Suits)).Length - 1; s++)
+                for (int s = 0; s < Enum.GetValues(typeof(Suits)).Length; s++)
                 {
-                    for (int r = 0; r < Enum.GetValues(typeof(Ranks)).Length - 1; r++)
+                    for (int r = 0; r < Enum.GetValues(typeof(Ranks)).Length; r++)
                     {
                         NewcardDeck.Cards.Enqueue(new Card((Ranks)r, (Suits)s));
                     }

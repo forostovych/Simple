@@ -7,14 +7,14 @@ namespace Simple.Core
 {
     public class CoreService : ICoreService
     {
-        private void GetPlayersFromUserConsole()
+        private void InitializePlayersFromUserConsole()
         {
             IConsole_UI UI = new Console_UI();
 
-            UI.ShowWellcomeMessage();
-            int playersCount = UI.GetCountPlayers();
-            int startMoneyAmount = UI.GetStartMoneyAmount();
-            UI.GetPlayersBet(startMoneyAmount);
+            UI.ShowWelcomeMessage();
+            int playersCount = UI.InitializePlayersCount();
+            int startMoneyAmount = UI.InitializeStartMoneyAmount();
+            UI.InitializePlayersBet(startMoneyAmount);
             List<string> playerNames = UI.GetPlayerNames(playersCount);
 
             AddPlayersToTable(playerNames, startMoneyAmount);
@@ -38,33 +38,36 @@ namespace Simple.Core
 
         public void StartGame(int countCards)
         {
-            IConsole_UI UI = new Console_UI();
-            GetPlayersFromUserConsole();                                    //          Create a game by User Input.  Select Count of players, money Amount fnd PlayerNames
-            ICardTableService CardTableService = new CardTableService();
+            //IConsole_UI UI = new Console_UI();
+            //ICardTableService CardTableService = new CardTableService();
 
-            //ICardTableService.CreateNewGame();
+            ////ICardTableService.CreateNewGame();
 
-            CardTableService.RemoveBetFromPlayers();                          //          Take away the first bet
-            CardTableService.DealCardsToPlayers(countCards);             //          Deal Cards too Players
-            ShowInfoAllPlayers();                                           //          Show all info
+            //CardTableService.RemoveBetFromPlayers();                        //          Take away the first bet
+            //CardTableService.DealCardsToPlayers(countCards);                //          Deal Cards to Players
+            //ShowInfoAllPlayers();                                           //          Show all info
 
-            var userSelection = CardTableService.AskUserSelection();        //          Ask Player about next move.
-            UI.ShowUIMessage("[ " + userSelection.ToString() + "]");        //          Show some info
-            CardTableService.DoActionByUserSelection(userSelection, CardTable.CardPlayers[0]);
-            ShowInfoAllPlayers();                                         //          Show all info
+            //var userSelection = CardTableService.AskUserSelection();        //          Ask Player about next move.
+            //UI.ShowUIMessage("[ " + userSelection.ToString() + "]");        //          Show some info
+            //CardTableService.DoActionByUserSelection(userSelection, CardTable.CardPlayers[0]);
+            //ShowInfoAllPlayers();                                           //          Show all info
 
             //ShowNewGame();
 
             ////    ======
+            ///
+
+            InitializePlayersFromUserConsole();                                    //          Create a game by User Input.  Select Count of players, money Amount fnd PlayerNames
+            //ShowInfoAllPlayers();                               //          Show all info
+
+            
             ICardTableService CTS = new CardTableService();
+            CTS.RemoveBetFromPlayers();                         //          Take away the first bet
+            CTS.DealCardsToPlayers(countCards);                 //          Deal Cards to Players
+
             while (true)
             {
-                CTS.RemoveBetFromPlayers();                         //          Take away the first bet
-                CTS.DealCardsToPlayers(countCards);              //          Deal Cards too Players
-                ShowInfoAllPlayers();                               //          Show all info
                 CTS.AskAllPlayersNextMove(countCards);
-
-
             }
             ////    ======
         }
