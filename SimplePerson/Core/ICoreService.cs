@@ -1,12 +1,10 @@
-﻿using Simple.PersonModel.PersonModels;
-using System;
-
-namespace Simple.Core
+﻿namespace Simple.Core
 {
     public interface ICoreService
     {
-        Person AddPlayer(string name, PersonRole role, decimal amount);
-        string GetAccountReportByPerson(Person person);
+
+        public void AddNewPlayer(string name, decimal startMoney);
+        public void StartGame(int countCardDeks);
 
     }
 }

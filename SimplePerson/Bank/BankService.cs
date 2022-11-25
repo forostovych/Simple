@@ -3,6 +3,7 @@ using Simple.Bank.TransactionModels;
 using Simple.PersonModel.PersonModels;
 using Simple;
 using Simple.Bank;
+using Simple.Testing_Console_UI;
 
 namespace Simple.Bank
 {
@@ -16,9 +17,25 @@ namespace Simple.Bank
             {
                 Data = DateTime.Now,
                 FromID = Guid.NewGuid(),
-                ToID = Guid.NewGuid(),
-                TransactionAmonut = amount,
+                ToID = account.Id,
+                TransactionAmount = amount,
                 Description = "Additing money"
+            };
+
+            account.Transactions.Add(newtransaction);
+        }
+
+        public void RemoveMoney(Person person, decimal amount)
+        {
+            Account account = GetAccountByPerson(person);
+
+            Transaction newtransaction = new Transaction()
+            {
+                Data = DateTime.Now,
+                FromID = account.Id,
+                ToID = Guid.NewGuid(),
+                TransactionAmount = amount * -1,
+                Description = "Removing money"
             };
 
             account.Transactions.Add(newtransaction);
@@ -37,7 +54,7 @@ namespace Simple.Bank
                         Data = DateTime.Now,
                         FromID = person.Id,
                         ToID = person.Id,
-                        TransactionAmonut = 0,
+                        TransactionAmount = 0,
                         Description = string.Empty
                     }
                 }
@@ -48,22 +65,27 @@ namespace Simple.Bank
         }
         public string CreateTransaction(Person personFrom, Person personTo, decimal amount)
         {
-            Account accountFrom = GetAccountByPerson(personFrom);
-            if (!IsEnougfMoney(personFrom, amount))
+            if (!IsEnoughMoney(personFrom, amount))
+            {
                 return TransactionStatus.Reject.ToString();
-
+            }
+            Account accountFrom = GetAccountByPerson(personFrom);
             Account accountTo = GetAccountByPerson(personTo);
-            SendMoney(personFrom, personTo, amount);
+            accountFrom.Transactions.Add(SendMoneyFrom(accountFrom, accountTo, amount));
+            accountTo.Transactions.Add(SendMoneyTo(accountFrom, accountTo, amount));
 
             return TransactionStatus.Success.ToString();
         }
-        public void SendMoney(Person From, Person TO, decimal amount)
+        public string SendMoney(Person From, Person TO, decimal amount)
         {
-            Account accountFrom = GetAccountByPerson(From);
-            Account accountTo = GetAccountByPerson(TO);
+            string transactionReport = CreateTransaction(From, TO, amount);
 
-            accountFrom.Transactions.Add (SendMoneyFrom(accountFrom, accountTo, amount));
-            accountTo.Transactions.Add( SendMoneyTo(accountFrom, accountTo, amount));
+            return $"" +
+                $"|| Sender: [{From.Name}] ||" +
+                $" Amount: [~ {amount}$ ~] ||" +
+                $" Getter: [{TO.Name}] ||" +
+                $" Status: ==[{transactionReport}]==";
+
         }
         private Transaction SendMoneyFrom(Account accountFrom, Account accountTO, decimal amount)
         {
@@ -72,7 +94,7 @@ namespace Simple.Bank
                 Data = DateTime.Now,
                 FromID = accountFrom.Id,
                 ToID = accountTO.Id,
-                TransactionAmonut = amount * -1,
+                TransactionAmount = amount * -1,
                 Description = string.Empty
             };
 
@@ -85,7 +107,7 @@ namespace Simple.Bank
                 Data = DateTime.Now,
                 FromID = accountTO.Id,
                 ToID = accountFrom.Id,
-                TransactionAmonut = amount,
+                TransactionAmount = amount,
                 Description = string.Empty
             };
 
@@ -97,9 +119,9 @@ namespace Simple.Bank
         }
         public decimal GetMoneyAmount(Account account)
         {
-            return account.Transactions.Select(x => x.TransactionAmonut).Sum();
+            return account.Transactions.Select(x => x.TransactionAmount).Sum();
         }
-        public bool IsEnougfMoney(Person account, decimal amount)
+        public bool IsEnoughMoney(Person account, decimal amount)
         {
             return GetMoneyAmount(GetAccountByPerson(account)) >= amount;
         }

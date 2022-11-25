@@ -1,10 +1,8 @@
-﻿using Simple;
-using Simple.Bank;
-using Simple.CardTable.CardDeckModel;
-using Simple.CardTable.CardModel;
+﻿using Simple.Bank;
+using Simple.GamingTable;
+using Simple.GamingTable.CardDeckModel;
+using Simple.GamingTable.CardTableModel;
 using Simple.Core;
-using Simple.PersonModel.PersonModels;
-using Simple.PersonModel.PersonServices;
 using Simple.Testing_Console_UI;
 
 namespace Simple
@@ -13,37 +11,48 @@ namespace Simple
     {
         static void Main()
         {
-            ICoreService coreService = new CoreService();
-            Person elena = coreService.AddPlayer("Elena", PersonRole.Player, 50000);
-            Person kitty = coreService.AddPlayer("Kitty", PersonRole.PlayerPro, 50000);
-            ShowAllPersonsReport(Data.PersonRepository.entities);
-            Console.WriteLine();
-            IBankService bankService = new BankService();
-            bankService.SendMoney(elena, kitty, 15000);
-            ShowAllPersonsReport(Data.PersonRepository.entities);
+            //SimplStartScenario();
 
-            ICardDeckService ICardDeck = new CardDeckService();
+            ICoreService Game = new CoreService();
+            Game.StartGame(2);
+
+
+        }
+
+        private static void SimplStartScenario()
+        {
+            ICardTableService cardTableService = new CardTableService();                            //      Add Interface TableService
+            IBankService bankService = new BankService();                                           //      Add Interface BankService
+
+
+            ICardDeckService cardDeckService = new CardDeckService();                               //      Add Interface DeckService
+
+
+            CardDeck TableCardDeck = cardDeckService.GetCardDeck(1);                                //      Create CardTable Deck
+            CardPlayer CardPlayerSlava = cardTableService.CreateCardPlayer("Slava", 75000);         //      Create Player One
+            CardPlayer CardPlayerValera = cardTableService.CreateCardPlayer("Valera", 75000);       //      Create Player Two
+
+
+            for (int i = 0; i < 6; i++)
+            {
+                (TableCardDeck, CardPlayerSlava.CardDeck) = cardDeckService.MoveCards(TableCardDeck, CardPlayerSlava.CardDeck, 1);
+                (TableCardDeck, CardPlayerValera.CardDeck) = cardDeckService.MoveCards(TableCardDeck, CardPlayerValera.CardDeck, 1);
+            }
+
+
+
             IConsole_UI UI = new Console_UI();
 
-            CardDeck cardsDeck_Desk = ICardDeck.GetCardDeck(2);
-            CardDeck cardsPlayer = ICardDeck.GetCardDeck(0);
+            UI.ShowCardDeck(TableCardDeck);
+            UI.ShowCardPlayerInfo(CardPlayerSlava);
+            UI.ShowCardPlayerInfo(CardPlayerValera);
 
-            (cardsDeck_Desk, cardsPlayer) = ICardDeck.MoveCards(cardsDeck_Desk, cardsPlayer, 6);
+            var transactionStatus = bankService.SendMoney(CardPlayerSlava.Person, CardPlayerValera.Person, 15000);
+            UI.ShowTransactionReport(transactionStatus);
 
-
-            UI.ShowCardDeck(cardsDeck_Desk);
-            UI.ShowPlayerCardDeck(cardsPlayer, kitty);
-
+            UI.ShowCardPlayerInfo(CardPlayerSlava);
+            UI.ShowCardPlayerInfo(CardPlayerValera);
         }
-
-        static void ShowAllPersonsReport(List<Person> peoples)
-        {
-            PersonService personService = new PersonService();
-            foreach (Person person in peoples)
-            {
-                Console.WriteLine(personService.GetPersonReport(person));
-            }
-        }
-
     }
+
 }

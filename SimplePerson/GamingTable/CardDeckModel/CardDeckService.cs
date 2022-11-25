@@ -1,7 +1,6 @@
-﻿using Simple.CardTable.CardDeckModel;
-using Simple.CardTableModel.CardModel;
+﻿using Simple.CardTableModel.CardModel;
 
-namespace Simple.CardTable.CardModel
+namespace Simple.GamingTable.CardDeckModel
 {
     public class CardDeckService : ICardDeckService
     {
@@ -12,18 +11,19 @@ namespace Simple.CardTable.CardModel
 
             for (int i = 0; i < countDeck; i++)
             {
-                for (int s = 0; s < Enum.GetValues(typeof(Suits)).Length - 1; s++)
+                for (int s = 0; s < Enum.GetValues(typeof(Suits)).Length; s++)
                 {
-                    for (int r = 0; r < Enum.GetValues(typeof(Ranks)).Length - 1; r++)
+                    for (int r = 0; r < Enum.GetValues(typeof(Ranks)).Length; r++)
                     {
                         NewcardDeck.Cards.Enqueue(new Card((Ranks)r, (Suits)s));
                     }
                 }
-                NewcardDeck.Cards.Enqueue(new Card(Ranks.Joker, Suits.Joker));
-                NewcardDeck.Cards.Enqueue(new Card(Ranks.Joker, Suits.Joker));
+                //NewcardDeck.Cards.Enqueue(new Card(Ranks.Joker, Suits.Joker));
+                //NewcardDeck.Cards.Enqueue(new Card(Ranks.Joker, Suits.Joker));
             }
+            NewcardDeck.Id = Guid.NewGuid();
 
-            return NewcardDeck;
+            return ShaffleCardDeck(NewcardDeck.Cards);
         }
 
         public CardDeck GetCardDeck(int count)
@@ -45,6 +45,20 @@ namespace Simple.CardTable.CardModel
                 cardDeckTo.Cards.Enqueue(cardDeckFrom.Cards.Dequeue());
             }
             return (cardDeckFrom, cardDeckTo);
+        }
+
+        private CardDeck ShaffleCardDeck(Queue<Card> cards)
+        {
+            CardDeck cardDeck = new CardDeck()
+            {
+                Cards = new Queue<Card>()
+            };
+
+            var shuffledCards = cards.OrderBy(_ => new Random().Next()).ToList();
+            for (int i = 0; i < shuffledCards.Count - 1; i++)
+                cardDeck.Cards.Enqueue(shuffledCards[i]);
+
+            return cardDeck;
         }
     }
 }
