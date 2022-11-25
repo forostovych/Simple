@@ -11,5 +11,7 @@ namespace Simple.GamingTable.CardTableModel
         public CardDeck CardDeck { get; set; }
         public int PlayerBank { get; set; }
         public UserSelector UserSelect { get; set; }
+        public GameStatus StatusGame { get; set; }
+        public bool MoveIsCompleted { get; set; }
     }
 }

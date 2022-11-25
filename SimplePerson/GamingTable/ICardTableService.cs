@@ -11,7 +11,7 @@ namespace Simple.GamingTable
         void DealCardsToPlayers(int numberOfCads);
         int CalculateCardsWeight(CardDeck cardDeck);
         UserSelector AskUserSelection();
-        void DoActionByUserSelection(UserSelector select, CardPlayer player);
+        bool DoActionByUserSelection(UserSelector select, CardPlayer player);
         void TakeMoneyFromPlayer(CardPlayer player, decimal amount);
         void RemoveBetFromPlayers();
         void AskAllPlayersNextMove(int countCards);

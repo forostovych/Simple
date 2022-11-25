@@ -5,7 +5,7 @@
 
         Player,
         PlayerPro,
-        Administrator
+        Dealer
 
     }
 }

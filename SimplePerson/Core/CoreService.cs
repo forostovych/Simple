@@ -2,6 +2,7 @@
 using Simple.GamingTable.CardTableModel;
 using Simple.PersonModel.PersonModels;
 using Simple.Testing_Console_UI;
+using System.Xml.Linq;
 
 namespace Simple.Core
 {
@@ -26,6 +27,13 @@ namespace Simple.Core
             {
                 AddNewPlayer(playerName, startMoneyAmount);
             }
+            AddNewDealer("Dealer", startMoneyAmount*10000);
+        }
+
+        private void AddNewDealer(string name, int startMoney)
+        {
+            ICardTableService cardTableService = new CardTableService();                                //      Add Interface TableService
+            cardTableService.CreateCardPlayer(name, startMoney, PersonRole.Dealer);           //      Create Player One
         }
 
         public void AddNewPlayer(string name, decimal startMoney)

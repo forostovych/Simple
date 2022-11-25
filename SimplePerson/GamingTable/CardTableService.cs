@@ -24,8 +24,12 @@ namespace Simple.GamingTable
             cardPlayer.Account = bankService.CreateAccount(cardPlayer.Person);              //      
             cardPlayer.Person.AccountID = cardPlayer.Account.Id;                            //      
 
+            if (role != PersonRole.Dealer)
+            {
+                Data.PersonRepository.Add(cardPlayer.Person);
+            }
             Data.AccountRepository.Add(cardPlayer.Account);
-            Data.PersonRepository.Add(cardPlayer.Person);
+
 
             bankService.AddMoney(cardPlayer.Person, amount);
             cardPlayer.CardDeck = ICardDeck.GetCardDeck(0);
@@ -35,19 +39,26 @@ namespace Simple.GamingTable
         }
         private void AddPlayerToDesk(CardPlayer cardPlayer)
         {
-            CardTableModel.CardTable.CardPlayers.Add(cardPlayer);
+            if (cardPlayer.Person.Role == PersonRole.Dealer)
+            {
+                CardTable.Dealer = cardPlayer;
+                return;
+            }
+            CardTable.CardPlayers.Add(cardPlayer);
         }
         public void DealCardsToPlayers(int numberOfCards)
         {
             ICardDeckService ICardDeck = new CardDeckService();                             //      Add Interface CardDeckService
-            var TableCardDeck = CardTableModel.CardTable.TableCardDeck = ICardDeck.GetCardDeck(4);
+            var TableCardDeck = CardTable.TableCardDeck = ICardDeck.GetCardDeck(4);
 
             for (int i = 0; i < numberOfCards; i++)
             {
-                foreach (var cardPlayer in CardTableModel.CardTable.CardPlayers)
+                foreach (var cardPlayer in CardTable.CardPlayers)
                 {
                     (TableCardDeck, cardPlayer.CardDeck) = ICardDeck.MoveCards(TableCardDeck, cardPlayer.CardDeck, 1);
                 }
+
+                (TableCardDeck, CardTable.Dealer.CardDeck) = ICardDeck.MoveCards(TableCardDeck, CardTable.Dealer.CardDeck, 1);
             }
         }
         public void RemoveBetFromPlayers()
@@ -139,33 +150,36 @@ namespace Simple.GamingTable
             IConsole_UI UI = new Console_UI();
             return UI.GetSelectorFromUser();
         }
-        public void DoActionByUserSelection(UserSelector select, CardPlayer player)
+        public bool DoActionByUserSelection(UserSelector select, CardPlayer player)
         {
             switch (select)
             {
-                case UserSelector.Hit: DoHit(player); break;                // true
-                case UserSelector.Stand: DoStand(player); break;            // false
-                case UserSelector.Double: DoDouble(player); break;          // false
-                case UserSelector.Surrender: DoSurrender(player); break;    // 
+                case UserSelector.Hit: return DoHit(player);                //  true
+                case UserSelector.Stand: return DoStand(player);            //  false
+                //case UserSelector.Double: DoDouble(player); break;        //  false
+                case UserSelector.Surrender: return DoSurrender(player);    //  false
 
-                default: break;
+                default: return false;
             }
         }
-        private void DoSurrender(CardPlayer player)
+        private bool DoSurrender(CardPlayer player)
+        {
+            IBankService BS = new BankService();
+            BS.CreateTransaction(CardTable.Dealer.Person, player.Person, CardTable.DeskBet / 2);
+            return false;
+        }
+        private bool DoDouble(CardPlayer player)
         {
             throw new NotImplementedException();
         }
-        private void DoDouble(CardPlayer player)
+        private bool DoStand(CardPlayer player)
         {
-            throw new NotImplementedException();
+            return false;
         }
-        private void DoStand(CardPlayer player)
-        {
-            throw new NotImplementedException();
-        }
-        private void DoHit(CardPlayer player)
+        private bool DoHit(CardPlayer player)
         {
             DealCardToPlayer(player);
+            return true;
         }
 
 
@@ -177,7 +191,9 @@ namespace Simple.GamingTable
 
             for (int i = 0; i < CardTable.CardPlayers.Count; i++)
             {
-                while (true)
+                bool IsNotCompleted = CardTable.CardPlayers[i].MoveIsCompleted = true;
+                
+                while (IsNotCompleted)
                 {
                     UI.Clear();
                     UI.ShowCardPlayerInfo(CardTable.CardPlayers[i]);                    //          Show some info.
@@ -190,9 +206,10 @@ namespace Simple.GamingTable
                     {
 
                     }
-                    DoActionByUserSelection(CardTable.CardPlayers[i].UserSelect, CardTable.CardPlayers[i]);   //          Do some Action.
+                    IsNotCompleted = DoActionByUserSelection(CardTable.CardPlayers[i].UserSelect, CardTable.CardPlayers[i]);   //          Do some Action.
                 }
             }
         }
+
     }
 }

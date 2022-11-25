@@ -8,8 +8,8 @@ namespace Simple.GamingTable.CardTableModel
 {
     public enum GameStatus
     {
-        Unknown,
-        Win,
-        Lose
+        Unknown,        //      Game is runing
+        Win,            //      Player is Win
+        Lose            //      Player is Lose
     }
 }
