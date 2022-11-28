@@ -12,7 +12,8 @@ namespace Simple.GamingTable.CardTableModel
         Hit,                //      GetCard
         Stand,              //      Enough
         //Double,             //      Double bet
-        Surrender           //      Surrender
+        Surrender,           //      Surrender
+        Unknown
 
     }
 }

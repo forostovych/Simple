@@ -15,5 +15,8 @@ namespace Simple.GamingTable
         void TakeMoneyFromPlayer(CardPlayer player, decimal amount);
         void RemoveBetFromPlayers();
         void AskAllPlayersNextMove(int countCards);
+        void CountPlayersResult();
+        string GetPlayerGameStatus(CardPlayer player);
+        void GameOver();
     }
 }

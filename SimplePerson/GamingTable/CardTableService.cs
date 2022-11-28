@@ -5,8 +5,6 @@ using Simple.CardTableModel.CardModel;
 using Simple.PersonModel.PersonModels;
 using Simple.PersonModel.PersonServices;
 using Simple.Testing_Console_UI;
-using System.Numerics;
-using Simple.Bank.AccountModels;
 
 namespace Simple.GamingTable
 {
@@ -36,15 +34,6 @@ namespace Simple.GamingTable
 
             AddPlayerToDesk(cardPlayer);
             return cardPlayer;
-        }
-        private void AddPlayerToDesk(CardPlayer cardPlayer)
-        {
-            if (cardPlayer.Person.Role == PersonRole.Dealer)
-            {
-                CardTable.Dealer = cardPlayer;
-                return;
-            }
-            CardTable.CardPlayers.Add(cardPlayer);
         }
         public void DealCardsToPlayers(int numberOfCards)
         {
@@ -97,6 +86,74 @@ namespace Simple.GamingTable
             }
             return cardsWeight;
         }
+        public UserSelector AskUserSelection()
+        {
+            IConsole_UI UI = new Console_UI();
+            return UI.GetSelectorFromUser();
+        }
+        public bool DoActionByUserSelection(UserSelector select, CardPlayer player)
+        {
+            switch (select)
+            {
+                case UserSelector.Hit: return DoHit(player);                //  true
+                case UserSelector.Stand: return DoStand(player);            //  false
+                //case UserSelector.Double: DoDouble(player); break;        //  false
+                case UserSelector.Surrender: return DoSurrender(player);    //  false
+
+                default: return false;
+            }
+        }
+        public void AskAllPlayersNextMove(int countCards)
+        {
+            ICardTableService CTS = new CardTableService();
+            IConsole_UI UI = new Console_UI();
+
+            for (int i = 0; i < CardTable.CardPlayers.Count; i++)
+            {
+                bool IsNotCompleted = CardTable.CardPlayers[i].MoveIsCompleted = true;
+                while (IsNotCompleted)
+                {
+
+                    UI.Clear();
+                    UI.ShowCardPlayerInfo(CardTable.CardPlayers[i]); //          Show some info.
+                    Thread.Sleep(1000);  
+                    if (CardTable.CardPlayers[i].StatusGame == GameStatus.Lose)
+                    {
+                        break;
+                    }
+
+                    CardTable.CardPlayers[i].UserSelect = AskUserSelection(); 
+                    IsNotCompleted = DoActionByUserSelection(CardTable.CardPlayers[i].UserSelect, CardTable.CardPlayers[i]);   //
+                                                                                                                               //   Do some Action.
+                    if (CalculateCardsWeight(CardTable.CardPlayers[i].CardDeck) > 21)
+                    {
+                        CardTable.CardPlayers[i].StatusGame = GameStatus.Lose;
+                        break;
+                    }
+
+                }
+            }
+        }
+        private bool DoSurrender(CardPlayer player)
+        {
+            IBankService BS = new BankService();
+            BS.CreateTransaction(CardTable.Dealer.Person, player.Person, CardTable.DeskBet / 2);
+            player.StatusGame = GameStatus.Lose;
+            return false;
+        }
+        private bool DoDouble(CardPlayer player)
+        {
+            throw new NotImplementedException();
+        }
+        private bool DoStand(CardPlayer player)
+        {
+            return false;
+        }
+        private bool DoHit(CardPlayer player)
+        {
+            DealCardToPlayer(player);
+            return true;
+        }
         private int ConvertCardToCardWeightOverkill(Card card)
         {
             int cardRankValue;
@@ -145,71 +202,54 @@ namespace Simple.GamingTable
 
             return cardRankValue;
         }
-        public UserSelector AskUserSelection()
+        private void AddPlayerToDesk(CardPlayer cardPlayer)
         {
-            IConsole_UI UI = new Console_UI();
-            return UI.GetSelectorFromUser();
-        }
-        public bool DoActionByUserSelection(UserSelector select, CardPlayer player)
-        {
-            switch (select)
+            if (cardPlayer.Person.Role == PersonRole.Dealer)
             {
-                case UserSelector.Hit: return DoHit(player);                //  true
-                case UserSelector.Stand: return DoStand(player);            //  false
-                //case UserSelector.Double: DoDouble(player); break;        //  false
-                case UserSelector.Surrender: return DoSurrender(player);    //  false
-
-                default: return false;
+                CardTable.Dealer = cardPlayer;
+                return;
             }
+            CardTable.CardPlayers.Add(cardPlayer);
         }
-        private bool DoSurrender(CardPlayer player)
+        public void CountPlayersResult()
         {
-            IBankService BS = new BankService();
-            BS.CreateTransaction(CardTable.Dealer.Person, player.Person, CardTable.DeskBet / 2);
-            return false;
-        }
-        private bool DoDouble(CardPlayer player)
-        {
-            throw new NotImplementedException();
-        }
-        private bool DoStand(CardPlayer player)
-        {
-            return false;
-        }
-        private bool DoHit(CardPlayer player)
-        {
-            DealCardToPlayer(player);
-            return true;
-        }
 
-
-        public void AskAllPlayersNextMove(int countCards)
-        {
-            ICardTableService CTS = new CardTableService();
-            IConsole_UI UI = new Console_UI();
-
-
-            for (int i = 0; i < CardTable.CardPlayers.Count; i++)
+            foreach (var player in CardTable.CardPlayers)
             {
-                bool IsNotCompleted = CardTable.CardPlayers[i].MoveIsCompleted = true;
-                
-                while (IsNotCompleted)
+                if (player.StatusGame == GameStatus.Lose)
                 {
-                    UI.Clear();
-                    UI.ShowCardPlayerInfo(CardTable.CardPlayers[i]);                    //          Show some info.
-                    CardTable.CardPlayers[i].UserSelect = AskUserSelection();                             //          Ask Player about next move.
-                    if (CardTable.CardPlayers[i].UserSelect == UserSelector.Surrender)
-                    {
-                        break;
-                    }
-                    else if (CardTable.CardPlayers[i].UserSelect == UserSelector.Stand)
-                    {
-
-                    }
-                    IsNotCompleted = DoActionByUserSelection(CardTable.CardPlayers[i].UserSelect, CardTable.CardPlayers[i]);   //          Do some Action.
+                    return;
                 }
+
+                if (CalculateCardsWeight(player.CardDeck) > CalculateCardsWeight(CardTable.Dealer.CardDeck))
+                {
+                    ICardTableService CTS = new CardTableService();
+                    IBankService IBS = new BankService();
+
+
+                    player.StatusGame = GameStatus.Win;
+                    IBS.CreateTransaction(CardTable.Dealer.Person, player.Person, CardTable.DeskBet * 2);
+                }
+
             }
         }
+        public string GetPlayerGameStatus(CardPlayer player) => player.StatusGame.ToString();
+        public void GameOver()
+        {
+            IConsole_UI UI = new Console_UI();
+            UI.ShowUIMessage("Game Over");
 
+            foreach (var player in CardTable.CardPlayers)
+            {
+                UI.ShowCardPlayerInfo(player);
+                player.CardDeck.Cards.Clear();
+                player.UserSelect = UserSelector.Unknown;
+                player.StatusGame = GameStatus.Unknown;
+            }
+            
+            Thread.Sleep(3000);
+            bool result = UI.GetFromUserStartNEwOrNo();
+                 
+        }
     }
 }

@@ -5,21 +5,38 @@ using Simple.CardTableModel.CardModel;
 using Simple.GamingTable.CardDeckModel;
 using Simple.GamingTable.CardTableModel;
 using Simple.PersonModel.PersonModels;
+using System.Security.Principal;
 
 namespace Simple.Testing_Console_UI
 {
     public class Console_UI : IConsole_UI
     {
-
         public void ShowCardPlayerInfo(CardPlayer cardPlayer)
         {
             ShowPlayerCardDeck(cardPlayer.CardDeck, cardPlayer.Person);
             ShowCardPlayerAccount(cardPlayer.Account);
+            ShowPlayerGameStatus(cardPlayer);
         }
+
+        private void ShowPlayerGameStatus(CardPlayer player)
+        {
+            ICardTableService TS = new CardTableService();
+
+            string result = TS.GetPlayerGameStatus(player);
+            Console.WriteLine($"Game Status bt Player:[{player.Person.Name}] [ {result} ]\n");
+
+
+        }
+
         private void ShowCardPlayerAccount(Account account)
         {
             IBankService bankService = new BankService();
-            Console.WriteLine($"Money Amount: [ {bankService.GetMoneyAmount(account)} ]\n");
+
+            Console.Write($"Money Amount: [ ");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write($"{bankService.GetMoneyAmount(account)}");
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine($" $]");
         }
         public void ShowCardDeck(CardDeck deck)
         {
@@ -137,7 +154,7 @@ namespace Simple.Testing_Console_UI
             Console.WriteLine(new string('=', 120) + "\n");
             Console.ResetColor();
         }
-        public int InitializePlayersCount()
+        public int InitializeCountPlayers()
         {
             int count = 0;
             string inputResult = string.Empty;
@@ -187,7 +204,7 @@ namespace Simple.Testing_Console_UI
                 Console.Write($"Please enter the name of the {(ConvertNumberToText(i))} player: ");
 
                 Console.ForegroundColor = ConsoleColor.Green;
-                string name = Console.ReadLine();
+                string? name = Console.ReadLine();
                 if (!string.IsNullOrWhiteSpace(name))
                 {
                     Console.WriteLine($"Name of the {(ConvertNumberToText(i))} player: [ {name} ] - ok.\n");
@@ -287,7 +304,7 @@ namespace Simple.Testing_Console_UI
         {
             string result = string.Empty;
             int iterator = Enum.GetValues(typeof(UserSelector)).Length;
-            for (int i = 0; i < iterator; i++)
+            for (int i = 0; i < iterator - 1; i++)
             {
                 result += $"{(i + 1)} [{(UserSelector)i}]\n";
             }
@@ -322,6 +339,49 @@ namespace Simple.Testing_Console_UI
             }
 
         }
+        public List<string> InitializePlayerNames(int playersCount)
+        {
+            throw new NotImplementedException();
+        }
+        public int InitializePlayersCount()
+        {
+            int count = 0;
+            string inputResult = string.Empty;
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write("Please enter a number of players between 1 and 6: ");
 
+            while (true)
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                inputResult = Console.ReadLine();
+                if (IsInteger(inputResult) && int.Parse(inputResult) < 6 && int.Parse(inputResult) > 0)
+                {
+                    count = int.Parse(inputResult);
+                    Console.WriteLine($"Number of players is: [ {inputResult} ] - ok.\n");
+                    Console.ForegroundColor = ConsoleColor.White;
+
+                    break;
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Erorr!");
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.Write("Please enter a number between 1 and 6: ");
+                }
+            }
+
+            return count;
+        }
+        public bool GetFromUserStartNEwOrNo()
+        {
+            Console.WriteLine("Start new game?" +
+                "\nYes = 1 / No = 2");
+            string result = Console.ReadLine();
+            if (result == "1")
+                return true;
+            else
+                return false;
+        }
     }
 }
