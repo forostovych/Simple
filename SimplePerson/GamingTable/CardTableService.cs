@@ -246,7 +246,7 @@ namespace Simple.GamingTable
                 player.UserSelect = UserSelector.Unknown;
                 player.StatusGame = GameStatus.Unknown;
             }
-            
+            UI.ShowCardPlayerInfo(CardTable.Dealer);
             Thread.Sleep(3000);
             bool result = UI.GetFromUserStartNEwOrNo();
                  

@@ -5,7 +5,6 @@ using Simple.CardTableModel.CardModel;
 using Simple.GamingTable.CardDeckModel;
 using Simple.GamingTable.CardTableModel;
 using Simple.PersonModel.PersonModels;
-using System.Security.Principal;
 
 namespace Simple.Testing_Console_UI
 {
@@ -16,20 +15,22 @@ namespace Simple.Testing_Console_UI
             ShowPlayerCardDeck(cardPlayer.CardDeck, cardPlayer.Person);
             ShowCardPlayerAccount(cardPlayer.Account);
             ShowPlayerGameStatus(cardPlayer);
+            ShowUIMessage("");
         }
 
         private void ShowPlayerGameStatus(CardPlayer player)
         {
+
             ICardTableService TS = new CardTableService();
 
             string result = TS.GetPlayerGameStatus(player);
             Console.WriteLine($"Game Status bt Player:[{player.Person.Name}] [ {result} ]\n");
 
-
         }
 
         private void ShowCardPlayerAccount(Account account)
         {
+
             IBankService bankService = new BankService();
 
             Console.Write($"Money Amount: [ ");
@@ -37,6 +38,7 @@ namespace Simple.Testing_Console_UI
             Console.Write($"{bankService.GetMoneyAmount(account)}");
             Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine($" $]");
+
         }
         public void ShowCardDeck(CardDeck deck)
         {
@@ -289,8 +291,9 @@ namespace Simple.Testing_Console_UI
 
             while (true)
             {
+
                 ShowUIMessage(ConvertEnumToUIString());
-                string result = Console.ReadLine();
+                string result = Console.ReadLine().ToString();
                 if (IsInteger(result) && int.Parse(result) > 0 && int.Parse(result) < Enum.GetValues(typeof(UserSelector)).Length + 1)
                 {
                     return (UserSelector)(int.Parse(result) - 1);
@@ -300,6 +303,7 @@ namespace Simple.Testing_Console_UI
 
             }
         }
+
         private string ConvertEnumToUIString()
         {
             string result = string.Empty;
@@ -311,6 +315,7 @@ namespace Simple.Testing_Console_UI
 
             return result;
         }
+
         public void InitializePlayersBet(int startAmount)
         {
             int count = 0;
@@ -383,5 +388,6 @@ namespace Simple.Testing_Console_UI
             else
                 return false;
         }
+
     }
 }

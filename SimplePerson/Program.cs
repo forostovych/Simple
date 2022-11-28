@@ -1,8 +1,8 @@
 ﻿using Simple.Bank;
+using Simple.Core;
 using Simple.GamingTable;
 using Simple.GamingTable.CardDeckModel;
 using Simple.GamingTable.CardTableModel;
-using Simple.Core;
 using Simple.Testing_Console_UI;
 
 namespace Simple
@@ -11,11 +11,8 @@ namespace Simple
     {
         static void Main()
         {
-            //SimplStartScenario();
-
             ICoreService Game = new CoreService();
             Game.StartGame(2);
-
 
         }
 

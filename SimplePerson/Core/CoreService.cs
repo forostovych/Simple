@@ -20,7 +20,6 @@ namespace Simple.Core
 
             AddPlayersToTable(playerNames, startMoneyAmount);
         }
-
         private void AddPlayersToTable(List<string> playerNames, int startMoneyAmount)
         {
             foreach (string playerName in playerNames)
@@ -29,7 +28,6 @@ namespace Simple.Core
             }
             AddNewDealer("Dealer", startMoneyAmount*10000);
         }
-
         private void AddNewDealer(string name, int startMoney)
         {
             ICardTableService cardTableService = new CardTableService();                                //      Add Interface TableService
@@ -38,8 +36,8 @@ namespace Simple.Core
 
         public void AddNewPlayer(string name, decimal startMoney)
         {
-            ICardTableService cardTableService = new CardTableService();                                //      Add Interface TableService
-            cardTableService.CreateCardPlayer(name, startMoney);           //      Create Player One
+            ICardTableService cardTableService = new CardTableService();            //      Add Interface TableService
+            cardTableService.CreateCardPlayer(name, startMoney);                    //      Create Player One
         }
 
         public void StartGame(int countCards)
