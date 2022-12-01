@@ -42,28 +42,6 @@ namespace Simple.Core
 
         public void StartGame(int countCards)
         {
-            {
-                //IConsole_UI UI = new Console_UI();
-                //ICardTableService CardTableService = new CardTableService();
-
-                ////ICardTableService.CreateNewGame();
-
-                //CardTableService.RemoveBetFromPlayers();                        //          Take away the first bet
-                //CardTableService.DealCardsToPlayers(countCards);                //          Deal Cards to Players
-                //ShowInfoAllPlayers();                                           //          Show all info
-
-                //var userSelection = CardTableService.AskUserSelection();        //          Ask Player about next move.
-                //UI.ShowUIMessage("[ " + userSelection.ToString() + "]");        //          Show some info
-                //CardTableService.DoActionByUserSelection(userSelection, CardTable.CardPlayers[0]);
-                //ShowInfoAllPlayers();                                           //          Show all info
-
-                //ShowNewGame();
-                //ShowInfoAllPlayers();                               //          Show all info
-
-
-                ////    ======
-                ///
-            }
 
             InitializePlayersFromUserConsole();                                    //          Create a game by User Input.  Select Count of players, money Amount fnd PlayerNames
             ICardTableService CTS = new CardTableService();

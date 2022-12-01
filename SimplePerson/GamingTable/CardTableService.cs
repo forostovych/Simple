@@ -5,6 +5,7 @@ using Simple.CardTableModel.CardModel;
 using Simple.PersonModel.PersonModels;
 using Simple.PersonModel.PersonServices;
 using Simple.Testing_Console_UI;
+using System.Numerics;
 
 namespace Simple.GamingTable
 {
@@ -213,6 +214,14 @@ namespace Simple.GamingTable
         }
         public void CountPlayersResult()
         {
+            ICardTableService CTS = new CardTableService();
+            IBankService IBS = new BankService();
+
+            if (!DealerIsNotLose())
+            {
+                CardTable.Dealer.StatusGame = GameStatus.Lose;
+            }
+
 
             foreach (var player in CardTable.CardPlayers)
             {
@@ -221,17 +230,40 @@ namespace Simple.GamingTable
                     return;
                 }
 
-                if (CalculateCardsWeight(player.CardDeck) > CalculateCardsWeight(CardTable.Dealer.CardDeck))
+                ////        Dealer is Lose
+                if (player.StatusGame == GameStatus.Unknown && CardTable.Dealer.StatusGame == GameStatus.Lose)
                 {
-                    ICardTableService CTS = new CardTableService();
-                    IBankService IBS = new BankService();
-
 
                     player.StatusGame = GameStatus.Win;
                     IBS.CreateTransaction(CardTable.Dealer.Person, player.Person, CardTable.DeskBet * 2);
+
+                }
+
+                ////        If WIN
+                if (CalculateCardsWeight(player.CardDeck) > CalculateCardsWeight(CardTable.Dealer.CardDeck))
+                {
+
+                    player.StatusGame = GameStatus.Win;
+                    IBS.CreateTransaction(CardTable.Dealer.Person, player.Person, CardTable.DeskBet * 2);
+
+                }
+
+                ////        If Some result
+                if (CalculateCardsWeight(player.CardDeck) == CalculateCardsWeight(CardTable.Dealer.CardDeck))
+                {
+
+                    player.StatusGame = GameStatus.Draw;
+                    IBS.CreateTransaction(CardTable.Dealer.Person, player.Person, CardTable.DeskBet);
+
                 }
 
             }
+        }
+        private bool DealerIsNotLose()
+        {
+
+            return (CalculateCardsWeight(CardTable.Dealer.CardDeck) < 22) ? true : false;
+            
         }
         public string GetPlayerGameStatus(CardPlayer player) => player.StatusGame.ToString();
         public void GameOver()
@@ -243,6 +275,7 @@ namespace Simple.GamingTable
             {
                 UI.ShowCardPlayerInfo(player);
                 player.CardDeck.Cards.Clear();
+                CardTable.Dealer.CardDeck.Cards.Clear();
                 player.UserSelect = UserSelector.Unknown;
                 player.StatusGame = GameStatus.Unknown;
             }
