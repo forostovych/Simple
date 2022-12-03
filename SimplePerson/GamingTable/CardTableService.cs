@@ -292,6 +292,5 @@ namespace Simple.GamingTable
             CountDealerResult();
             CountPlayersResult();
         }
-        ув
     }
 }
