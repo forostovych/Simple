@@ -1,4 +1,5 @@
-﻿using Simple.GamingTable.CardTableModel;
+﻿using Simple.GamingTable.CardDeckModel;
+using Simple.GamingTable.CardTableModel;
 using Simple.Testing_Console_UI;
 
 namespace Simple.GamingTable
@@ -33,9 +34,9 @@ namespace Simple.GamingTable
 
         private UserSelector AI_Move()
         {
-            ICardTableService CTS = new CardTableService();
+            ICardDeckService CDS = new CardDeckService();
 
-            return CTS.CalculateCardsWeight(Player.CardDeck) < 17 ? UserSelector.Hit : UserSelector.Stand;
+            return CDS.CalculateCardsWeight(Player.CardDeck) < 17 ? UserSelector.Hit : UserSelector.Stand;
         }
     }
 }

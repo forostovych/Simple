@@ -1,9 +1,122 @@
 ﻿using Simple.CardTableModel.CardModel;
+using Simple.GamingTable.CardTableModel;
 
 namespace Simple.GamingTable.CardDeckModel
 {
+
     public class CardDeckService : ICardDeckService
     {
+
+        public CardDeck GetCardDeck(int count)
+        {
+            if (count == 0)
+            {
+                CardDeck cardDeck = new CardDeck();
+                cardDeck.Cards = new Queue<Card>();
+                return cardDeck;
+            }
+
+            return CreateCartDeck(count);
+        }
+        public (CardDeck, CardDeck) MoveCards(CardDeck cardDeckFrom, CardDeck cardDeckTo, int countOfCards)
+        {
+            for (int i = 0; i < countOfCards; i++)
+            {
+                cardDeckTo.Cards.Enqueue(cardDeckFrom.Cards.Dequeue());
+            }
+            return (cardDeckFrom, cardDeckTo);
+        }
+        public bool BlackJackOverPointCheck(CardDeck playerCardDeck)
+        {
+            return CalculateCardsWeight(playerCardDeck) > 21 ? true : false;
+        }
+        public int CalculateCardsWeight(CardDeck cardDeck)
+        {
+            int cardsWeight = 0;
+            foreach (var card in cardDeck.Cards)
+            {
+                cardsWeight += ConvertCardToCardWeight(card);
+            }
+
+            if (cardsWeight > 21)
+            {
+                cardsWeight = 0;
+                foreach (var card in cardDeck.Cards)
+                {
+                    cardsWeight += ConvertCardToCardWeightOverkill(card);
+                }
+            }
+            return cardsWeight;
+        }
+        public void DealCardToPlayer(CardPlayer cardPlayer)
+        {
+            ICardDeckService ICardDeck = new CardDeckService();                             //      Add Interface CardDeckService
+            (CardTable.TableCardDeck, cardPlayer.CardDeck) = ICardDeck.MoveCards(CardTable.TableCardDeck, cardPlayer.CardDeck, 1);
+        }
+        public void DealCardsToPlayers(int numberOfCards)
+        {
+            ICardDeckService ICardDeck = new CardDeckService();                             //      Add Interface CardDeckService
+            var TableCardDeck = CardTable.TableCardDeck = ICardDeck.GetCardDeck(4);
+
+            for (int i = 0; i < numberOfCards; i++)
+            {
+                foreach (var cardPlayer in CardTable.CardPlayers)
+                {
+                    (TableCardDeck, cardPlayer.CardDeck) = ICardDeck.MoveCards(TableCardDeck, cardPlayer.CardDeck, 1);
+                }
+
+                (TableCardDeck, CardTable.Dealer.CardDeck) = ICardDeck.MoveCards(TableCardDeck, CardTable.Dealer.CardDeck, 1);
+            }
+        }
+
+        private int ConvertCardToCardWeightOverkill(Card card)
+        {
+            int cardRankValue;
+
+            switch (card.Rank)
+            {
+                case Ranks.A: cardRankValue = 1; break;
+                case Ranks.K: cardRankValue = 10; break;
+                case Ranks.Q: cardRankValue = 10; break;
+                case Ranks.J: cardRankValue = 10; break;
+                case Ranks.Ten: cardRankValue = 10; break;
+                case Ranks.Nine: cardRankValue = 9; break;
+                case Ranks.Eight: cardRankValue = 8; break;
+                case Ranks.Seven: cardRankValue = 7; break;
+                case Ranks.Six: cardRankValue = 6; break;
+                case Ranks.Five: cardRankValue = 5; break;
+                case Ranks.Four: cardRankValue = 4; break;
+                case Ranks.Three: cardRankValue = 3; break;
+                case Ranks.Two: cardRankValue = 2; break;
+                default: cardRankValue = 0; break;
+            }
+
+            return cardRankValue;
+        }
+        private int ConvertCardToCardWeight(Card card)
+        {
+            int cardRankValue;
+
+            switch (card.Rank)
+            {
+                case Ranks.A: cardRankValue = 11; break;
+                case Ranks.K: cardRankValue = 10; break;
+                case Ranks.Q: cardRankValue = 10; break;
+                case Ranks.J: cardRankValue = 10; break;
+                case Ranks.Ten: cardRankValue = 10; break;
+                case Ranks.Nine: cardRankValue = 9; break;
+                case Ranks.Eight: cardRankValue = 8; break;
+                case Ranks.Seven: cardRankValue = 7; break;
+                case Ranks.Six: cardRankValue = 6; break;
+                case Ranks.Five: cardRankValue = 5; break;
+                case Ranks.Four: cardRankValue = 4; break;
+                case Ranks.Three: cardRankValue = 3; break;
+                case Ranks.Two: cardRankValue = 2; break;
+                default: cardRankValue = 0; break;
+            }
+
+            return cardRankValue;
+        }
         private CardDeck CreateCartDeck(int countDeck)
         {
             CardDeck NewcardDeck = new CardDeck();
@@ -25,28 +138,6 @@ namespace Simple.GamingTable.CardDeckModel
 
             return ShaffleCardDeck(NewcardDeck.Cards);
         }
-
-        public CardDeck GetCardDeck(int count)
-        {
-            if (count == 0)
-            {
-                CardDeck cardDeck = new CardDeck();
-                cardDeck.Cards = new Queue<Card>();
-                return cardDeck;
-            }
-
-            return CreateCartDeck(count);
-        }
-
-        public (CardDeck, CardDeck) MoveCards(CardDeck cardDeckFrom, CardDeck cardDeckTo, int countOfCards)
-        {
-            for (int i = 0; i < countOfCards; i++)
-            {
-                cardDeckTo.Cards.Enqueue(cardDeckFrom.Cards.Dequeue());
-            }
-            return (cardDeckFrom, cardDeckTo);
-        }
-
         private CardDeck ShaffleCardDeck(Queue<Card> cards)
         {
             CardDeck cardDeck = new CardDeck()
@@ -60,5 +151,8 @@ namespace Simple.GamingTable.CardDeckModel
 
             return cardDeck;
         }
+
+
     }
+
 }

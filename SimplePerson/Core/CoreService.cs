@@ -1,4 +1,5 @@
 ﻿using Simple.GamingTable;
+using Simple.GamingTable.CardDeckModel;
 using Simple.GamingTable.CardTableModel;
 using Simple.PersonModel.PersonModels;
 using Simple.Testing_Console_UI;
@@ -41,34 +42,20 @@ namespace Simple.Core
         {
             InitializePlayersFromUserConsole();                                    //          Create a game by User Input.  Select Count of players, money Amount fnd PlayerNames
             ICardTableService CTS = new CardTableService();
+            ICardDeckService CDS = new CardDeckService();
 
             while (true)
             {
                 CTS.RemoveBetFromPlayers();                         //          Take away the first bet
-                CTS.DealCardsToPlayers(countCards);                 //          Deal Cards to Players
+                CDS.DealCardsToPlayers(countCards);                 //          Deal Cards to Players
                 CTS.AskAllPlayersNextMove(countCards);
+
                 CTS.СountPointResult();
 
                 CTS.GameOver();
             }
         }
 
-        private void ShowNewGame()
-        {
-            ICardTableService tableService = new CardTableService();
-            IConsole_UI UI = new Console_UI();
-            UI.Clear();                                                 //      Clear All
 
-        }
-        private void ShowInfoAllPlayers()
-        {
-            Console.Clear();
-            IConsole_UI UI = new Console_UI();
-
-            foreach (var cardPlayer in CardTable.CardPlayers)
-            {
-                UI.ShowCardPlayerInfo(cardPlayer);
-            }
-        }
     }
 }

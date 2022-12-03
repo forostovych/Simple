@@ -8,17 +8,13 @@ namespace Simple.GamingTable
     {
 
         CardPlayer CreateCardPlayer(string name, decimal amount, PersonRole role = PersonRole.Player);
-        void DealCardsToPlayers(int numberOfCads);
-        int CalculateCardsWeight(CardDeck cardDeck);
         UserSelector AskUserSelection();
         bool DoActionByUserSelection(UserSelector select, CardPlayer player);
         void TakeMoneyFromPlayer(CardPlayer player, decimal amount);
         void RemoveBetFromPlayers();
         void AskAllPlayersNextMove(int countCards);
-        void CountPlayersResult();
         string GetPlayerGameStatus(CardPlayer player);
         void GameOver();
-        void CountDealerResult();
         void СountPointResult();
     }
 }

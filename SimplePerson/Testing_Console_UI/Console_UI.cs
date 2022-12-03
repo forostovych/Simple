@@ -57,14 +57,14 @@ namespace Simple.Testing_Console_UI
         }
         public void ShowPlayerCardDeck(CardDeck deck, Person person)
         {
-            ICardTableService tableService = new CardTableService();
+            ICardDeckService CDS = new CardDeckService();
 
             ShowPlayerName(person.Name);
             Console.Write("Cards: [ ");
             ShowCardDeckInHand(deck.Cards);
             Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine(" ]");
-            var weightOfCards = tableService.CalculateCardsWeight(deck);
+            var weightOfCards = CDS.CalculateCardsWeight(deck);
             Console.Write($"Card Points: [ ");
 
             Console.ForegroundColor = ConsoleColor.Red;
