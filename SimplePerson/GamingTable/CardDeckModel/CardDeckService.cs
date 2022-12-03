@@ -48,11 +48,13 @@ namespace Simple.GamingTable.CardDeckModel
             }
             return cardsWeight;
         }
+
         public void DealCardToPlayer(CardPlayer cardPlayer)
         {
             ICardDeckService ICardDeck = new CardDeckService();                             //      Add Interface CardDeckService
             (CardTable.TableCardDeck, cardPlayer.CardDeck) = ICardDeck.MoveCards(CardTable.TableCardDeck, cardPlayer.CardDeck, 1);
         }
+
         public void DealCardsToPlayers(int numberOfCards)
         {
             ICardDeckService ICardDeck = new CardDeckService();                             //      Add Interface CardDeckService

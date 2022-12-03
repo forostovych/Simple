@@ -28,7 +28,7 @@ namespace Simple.Testing_Console_UI
             ICardTableService TS = new CardTableService();
 
             string result = TS.GetPlayerGameStatus(player);
-            Console.WriteLine($"Game Status bt Player:[{player.Person.Name}] [ {result} ]\n");
+            Console.WriteLine($"Game Status by Player:[{player.Person.Name}] [ {result} ]\n");
 
         }
 

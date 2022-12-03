@@ -48,7 +48,8 @@ namespace Simple.GamingTable
             IConsole_UI UI = new Console_UI();
             ICardTableService CTS = new CardTableService();
 
-            
+
+
             UI.ShowCardPlayerInfo(CardTable.Dealer);
             IPlayerBot DealerBot = new PlayerBot(CardTable.Dealer);
             DealerBot.NextMove();
@@ -61,7 +62,6 @@ namespace Simple.GamingTable
                 {
                     UI.Clear();
                     UI.ShowCardPlayerInfo(CardTable.CardPlayers[i]); //          Show some info.
-                    ICardDeckService CDS = new CardDeckService();
 
                     Thread.Sleep(1000);
                     if (CardTable.CardPlayers[i].StatusGame == GameStatus.Lose)
@@ -72,11 +72,7 @@ namespace Simple.GamingTable
                     CardTable.CardPlayers[i].UserSelect = AskUserSelection();
                     IsNotCompleted = DoActionByUserSelection(CardTable.CardPlayers[i].UserSelect, CardTable.CardPlayers[i]);   //
                                                                                                                                //   Do some Action.
-                    if (CDS.CalculateCardsWeight(CardTable.CardPlayers[i].CardDeck) > 21)
-                    {
-                        CardTable.CardPlayers[i].StatusGame = GameStatus.Lose;
-                        break;
-                    }
+                    СountPointResult();
                 }
             }
 
@@ -98,7 +94,7 @@ namespace Simple.GamingTable
             {
                 case UserSelector.Hit: return DoHit(player);                //  true
                 case UserSelector.Stand: return DoStand(player);            //  false
-                //case UserSelector.Double: DoDouble(player); break;        //  false
+                case UserSelector.Double: return DoDouble(player);          //  false
                 case UserSelector.Surrender: return DoSurrender(player);    //  false
 
                 default: return false;
@@ -130,7 +126,6 @@ namespace Simple.GamingTable
             OverPointCheck();
             ComparingPointDealerPlayer();
         }
-
         private void ComparingPointDealerPlayer()
         {
             ICardDeckService CDS = new CardDeckService();
@@ -138,7 +133,36 @@ namespace Simple.GamingTable
             
             foreach (CardPlayer player in CardTable.CardPlayers)
             {
-                if (Dealer.StatusGame != GameStatus.Lose && player.StatusGame != GameStatus.Lose)
+                /*Practising in English language, sry*/
+
+                /*Updated*/
+                if (Dealer.StatusGame == GameStatus.Lose && player.StatusGame != GameStatus.Lose)
+                {
+                    /* Check the comment below */
+                    player.StatusGame = GameStatus.Win;
+
+                    /* Delete, because if Dealer's status equal "Lose", 
+                     * but player status is still equals "Unknown", 
+                     * he's definitely won this game. 
+                     * (for your interviewer) */
+                    /* if (CDS.CalculateCardsWeight(player.CardDeck) > CDS.CalculateCardsWeight(Dealer.CardDeck))
+                    {
+                        player.StatusGame = GameStatus.Win;
+                    } */
+                }
+                
+                /*Added*/
+                if (Dealer.StatusGame != GameStatus.Lose && player.StatusGame == GameStatus.Lose)
+                {
+                    Dealer.StatusGame = GameStatus.Win;
+                    /* If player's status equal "Lose", 
+                     * but Dealer's status still equals "Unknown", 
+                     * he's definitely won this game. 
+                     * (for your interviewer) */
+                }
+
+                /*Updated*/
+                if (Dealer.StatusGame == GameStatus.Unknown && player.StatusGame == GameStatus.Unknown)
                 {
 
                     if (CDS.CalculateCardsWeight(player.CardDeck) > CDS.CalculateCardsWeight(Dealer.CardDeck))
@@ -151,6 +175,9 @@ namespace Simple.GamingTable
                     {
                         player.StatusGame = GameStatus.Draw;
                         Dealer.StatusGame = GameStatus.Draw;
+                        /* Need to give them their bets back, even if player doubled,
+                         * so add transaction, or create a new method,
+                         * like StatusDraw() or something. */
                     }
 
                     if (CDS.CalculateCardsWeight(player.CardDeck) < CDS.CalculateCardsWeight(Dealer.CardDeck))
@@ -160,9 +187,17 @@ namespace Simple.GamingTable
                     }
 
                 }
+                
+                /* Maybe it's useless now. */
+                /* Yeah, everything is working good without it */
+                /* if (CDS.CalculateCardsWeight(player.CardDeck) > 21 && (CDS.CalculateCardsWeight(Dealer.CardDeck) < 22))
+                {
+                    Dealer.StatusGame = GameStatus.Win;
+                } */
+
+                /* Made DoDouble, it's working perfect, but i found an problem. There is no transaction if player's win*/
             }
         }
-
         private bool DoSurrender(CardPlayer player)
         {
             IBankService BS = new BankService();
@@ -172,7 +207,10 @@ namespace Simple.GamingTable
         }
         private bool DoDouble(CardPlayer player)
         {
-            throw new NotImplementedException();
+            IBankService BS = new BankService();
+            BS.CreateTransaction(player.Person, CardTable.Dealer.Person, CardTable.DeskBet);
+            DoHit(player);
+            return false;
         }
         private bool DoStand(CardPlayer player)
         {
