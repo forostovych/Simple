@@ -13,7 +13,11 @@ namespace Simple.Testing_Console_UI
         public void ShowCardPlayerInfo(CardPlayer cardPlayer)
         {
             ShowPlayerCardDeck(cardPlayer.CardDeck, cardPlayer.Person);
-            ShowCardPlayerAccount(cardPlayer.Account);
+            if (cardPlayer.Person.Role != PersonRole.Dealer)
+            {
+                ShowCardPlayerAccount(cardPlayer.Account);
+            }
+
             ShowPlayerGameStatus(cardPlayer);
             ShowUIMessage("");
         }
@@ -288,7 +292,6 @@ namespace Simple.Testing_Console_UI
         }
         public UserSelector GetSelectorFromUser()
         {
-
             while (true)
             {
 

@@ -1,16 +1,15 @@
 ﻿using Simple.Bank;
+using Simple.CardTableModel.CardModel;
 using Simple.GamingTable.CardDeckModel;
 using Simple.GamingTable.CardTableModel;
-using Simple.CardTableModel.CardModel;
 using Simple.PersonModel.PersonModels;
 using Simple.PersonModel.PersonServices;
 using Simple.Testing_Console_UI;
-using System.Numerics;
-
 namespace Simple.GamingTable
 {
     public class CardTableService : ICardTableService
     {
+
         public CardPlayer CreateCardPlayer(string name, decimal amount, PersonRole role = PersonRole.Player)
         {
             CardPlayer cardPlayer = new CardPlayer();
@@ -36,6 +35,14 @@ namespace Simple.GamingTable
             AddPlayerToDesk(cardPlayer);
             return cardPlayer;
         }
+        public void RemoveBetFromPlayers()
+        {
+            decimal bet = (decimal)CardTable.DeskBet;
+            foreach (CardPlayer player in CardTable.CardPlayers)
+            {
+                TakeMoneyFromPlayer(player, bet);
+            }
+        }
         public void DealCardsToPlayers(int numberOfCards)
         {
             ICardDeckService ICardDeck = new CardDeckService();                             //      Add Interface CardDeckService
@@ -51,13 +58,42 @@ namespace Simple.GamingTable
                 (TableCardDeck, CardTable.Dealer.CardDeck) = ICardDeck.MoveCards(TableCardDeck, CardTable.Dealer.CardDeck, 1);
             }
         }
-        public void RemoveBetFromPlayers()
+        public void AskAllPlayersNextMove(int countCards)
         {
-            decimal bet = (decimal)CardTable.DeskBet;
-            foreach (CardPlayer player in CardTable.CardPlayers)
+            IConsole_UI UI = new Console_UI();
+            ICardTableService CTS = new CardTableService();
+
+            
+            UI.ShowCardPlayerInfo(CardTable.Dealer);
+            IPlayerBot DealerBot = new PlayerBot(CardTable.Dealer);
+            DealerBot.NextMove();
+
+
+            for (int i = 0; i < CardTable.CardPlayers.Count; i++)
             {
-                TakeMoneyFromPlayer(player, bet);
+                bool IsNotCompleted = CardTable.CardPlayers[i].MoveIsCompleted = true;
+                while (IsNotCompleted)
+                {
+                    UI.Clear();
+                    UI.ShowCardPlayerInfo(CardTable.CardPlayers[i]); //          Show some info.
+                    Thread.Sleep(1000);
+                    if (CardTable.CardPlayers[i].StatusGame == GameStatus.Lose)
+                    {
+                        break;
+                    }
+
+                    CardTable.CardPlayers[i].UserSelect = AskUserSelection();
+                    IsNotCompleted = DoActionByUserSelection(CardTable.CardPlayers[i].UserSelect, CardTable.CardPlayers[i]);   //
+                                                                                                                               //   Do some Action.
+                    if (CalculateCardsWeight(CardTable.CardPlayers[i].CardDeck) > 21)
+                    {
+                        CardTable.CardPlayers[i].StatusGame = GameStatus.Lose;
+                        break;
+                    }
+                }
             }
+
+
         }
         public void TakeMoneyFromPlayer(CardPlayer player, decimal amount)
         {
@@ -102,37 +138,6 @@ namespace Simple.GamingTable
                 case UserSelector.Surrender: return DoSurrender(player);    //  false
 
                 default: return false;
-            }
-        }
-        public void AskAllPlayersNextMove(int countCards)
-        {
-            ICardTableService CTS = new CardTableService();
-            IConsole_UI UI = new Console_UI();
-
-            for (int i = 0; i < CardTable.CardPlayers.Count; i++)
-            {
-                bool IsNotCompleted = CardTable.CardPlayers[i].MoveIsCompleted = true;
-                while (IsNotCompleted)
-                {
-
-                    UI.Clear();
-                    UI.ShowCardPlayerInfo(CardTable.CardPlayers[i]); //          Show some info.
-                    Thread.Sleep(1000);  
-                    if (CardTable.CardPlayers[i].StatusGame == GameStatus.Lose)
-                    {
-                        break;
-                    }
-
-                    CardTable.CardPlayers[i].UserSelect = AskUserSelection(); 
-                    IsNotCompleted = DoActionByUserSelection(CardTable.CardPlayers[i].UserSelect, CardTable.CardPlayers[i]);   //
-                                                                                                                               //   Do some Action.
-                    if (CalculateCardsWeight(CardTable.CardPlayers[i].CardDeck) > 21)
-                    {
-                        CardTable.CardPlayers[i].StatusGame = GameStatus.Lose;
-                        break;
-                    }
-
-                }
             }
         }
         private bool DoSurrender(CardPlayer player)
@@ -217,12 +222,6 @@ namespace Simple.GamingTable
             ICardTableService CTS = new CardTableService();
             IBankService IBS = new BankService();
 
-            if (!DealerIsNotLose())
-            {
-                CardTable.Dealer.StatusGame = GameStatus.Lose;
-            }
-
-
             foreach (var player in CardTable.CardPlayers)
             {
                 if (player.StatusGame == GameStatus.Lose)
@@ -233,56 +232,66 @@ namespace Simple.GamingTable
                 ////        Dealer is Lose
                 if (player.StatusGame == GameStatus.Unknown && CardTable.Dealer.StatusGame == GameStatus.Lose)
                 {
-
                     player.StatusGame = GameStatus.Win;
                     IBS.CreateTransaction(CardTable.Dealer.Person, player.Person, CardTable.DeskBet * 2);
-
                 }
 
                 ////        If WIN
                 if (CalculateCardsWeight(player.CardDeck) > CalculateCardsWeight(CardTable.Dealer.CardDeck))
                 {
-
                     player.StatusGame = GameStatus.Win;
-                    IBS.CreateTransaction(CardTable.Dealer.Person, player.Person, CardTable.DeskBet * 2);
+                    CardTable.Dealer.StatusGame = GameStatus.Lose;
 
+                    IBS.CreateTransaction(CardTable.Dealer.Person, player.Person, CardTable.DeskBet * 2);
                 }
 
                 ////        If Some result
                 if (CalculateCardsWeight(player.CardDeck) == CalculateCardsWeight(CardTable.Dealer.CardDeck))
                 {
-
                     player.StatusGame = GameStatus.Draw;
                     IBS.CreateTransaction(CardTable.Dealer.Person, player.Person, CardTable.DeskBet);
-
                 }
 
             }
         }
-        private bool DealerIsNotLose()
+        private bool DealerIsLose()
         {
-
-            return (CalculateCardsWeight(CardTable.Dealer.CardDeck) < 22) ? true : false;
-            
+            return (CalculateCardsWeight(CardTable.Dealer.CardDeck) > 21) ? true : false;
         }
         public string GetPlayerGameStatus(CardPlayer player) => player.StatusGame.ToString();
         public void GameOver()
         {
             IConsole_UI UI = new Console_UI();
+
             UI.ShowUIMessage("Game Over");
+            UI.ShowCardPlayerInfo(CardTable.Dealer);
+
 
             foreach (var player in CardTable.CardPlayers)
             {
                 UI.ShowCardPlayerInfo(player);
                 player.CardDeck.Cards.Clear();
-                CardTable.Dealer.CardDeck.Cards.Clear();
                 player.UserSelect = UserSelector.Unknown;
                 player.StatusGame = GameStatus.Unknown;
             }
-            UI.ShowCardPlayerInfo(CardTable.Dealer);
             Thread.Sleep(3000);
             bool result = UI.GetFromUserStartNEwOrNo();
-                 
+            CardTable.Dealer.CardDeck.Cards.Clear();
+
+
         }
+        public void CountDealerResult()
+        {
+            if (DealerIsLose())
+            {
+                CardTable.Dealer.StatusGame = GameStatus.Lose;
+            }
+        }
+        public void СountPointResult()
+        {
+            CountDealerResult();
+            CountPlayersResult();
+        }
+        ув
     }
 }

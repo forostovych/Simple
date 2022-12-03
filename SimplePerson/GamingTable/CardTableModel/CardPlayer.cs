@@ -8,5 +8,6 @@ namespace Simple.GamingTable.CardTableModel
 {
     public class CardPlayer : ACardTableModel
     {
+
     }
 }

@@ -18,5 +18,7 @@ namespace Simple.GamingTable
         void CountPlayersResult();
         string GetPlayerGameStatus(CardPlayer player);
         void GameOver();
+        void CountDealerResult();
+        void СountPointResult();
     }
 }
