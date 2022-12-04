@@ -14,7 +14,7 @@ namespace Simple.GamingTable
         void RemoveBetFromPlayers();
         void AskAllPlayersNextMove(int countCards);
         string GetPlayerGameStatus(CardPlayer player);
-        void GameOver();
         void СountPointResult();
+        Task GameOver();
     }
 }

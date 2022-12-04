@@ -46,7 +46,7 @@ namespace Simple.Core
         }
 
 
-        public void StartGame(int countCards)
+        public async Task StartGameAsync(int countCards)
         {
             InitializePlayersFromUserConsole();                                    //          Create a game by User Input.  Select Count of players, money Amount fnd PlayerNames
             ICardTableService CTS = new CardTableService();
@@ -59,7 +59,7 @@ namespace Simple.Core
                 CTS.AskAllPlayersNextMove(countCards);
                 CTS.СountPointResult();
 
-                CTS.GameOver();
+                await CTS.GameOver();
             }
         }
 

@@ -101,7 +101,7 @@ namespace Simple.GamingTable
             }
         }
         public string GetPlayerGameStatus(CardPlayer player) => player.StatusGame.ToString();
-        public void GameOver()
+        public async Task GameOver()
         {
             IConsole_UI UI = new Console_UI();
             UI.Clear();
@@ -111,12 +111,12 @@ namespace Simple.GamingTable
 
             foreach (var player in CardTable.CardPlayers)
             {
-                UI.ShowCardPlayerInfo(player);
+                await UI.ShowCardPlayerInfo(player);
                 player.CardDeck.Cards.Clear();
                 player.UserSelect = UserSelector.Unknown;
                 player.StatusGame = GameStatus.Unknown;
             }
-            Thread.Sleep(3000);
+            //Thread.Sleep(3000);
             bool result = UI.GetFromUserStartNEwOrNo();
             CardTable.Dealer.CardDeck.Cards.Clear();
 
@@ -133,69 +133,43 @@ namespace Simple.GamingTable
             
             foreach (CardPlayer player in CardTable.CardPlayers)
             {
-                /*Practising in English language, sry*/
 
-                /*Updated*/
                 if (Dealer.StatusGame == GameStatus.Lose && player.StatusGame != GameStatus.Lose)
                 {
-                    /* Check the comment below */
                     player.StatusGame = GameStatus.Win;
-
-                    /* Delete, because if Dealer's status equal "Lose", 
-                     * but player status is still equals "Unknown", 
-                     * he's definitely won this game. 
-                     * (for your interviewer) */
-                    /* if (CDS.CalculateCardsWeight(player.CardDeck) > CDS.CalculateCardsWeight(Dealer.CardDeck))
-                    {
-                        player.StatusGame = GameStatus.Win;
-                    } */
+                    player.StatusGame = GameStatus.Lose;
                 }
-                
-                /*Added*/
-                if (Dealer.StatusGame != GameStatus.Lose && player.StatusGame == GameStatus.Lose)
+
+                if (Dealer.StatusGame == GameStatus.Unknown && player.StatusGame == GameStatus.Lose)
                 {
                     Dealer.StatusGame = GameStatus.Win;
-                    /* If player's status equal "Lose", 
-                     * but Dealer's status still equals "Unknown", 
-                     * he's definitely won this game. 
-                     * (for your interviewer) */
                 }
 
-                /*Updated*/
                 if (Dealer.StatusGame == GameStatus.Unknown && player.StatusGame == GameStatus.Unknown)
                 {
-
                     if (CDS.CalculateCardsWeight(player.CardDeck) > CDS.CalculateCardsWeight(Dealer.CardDeck))
                     {
                         player.StatusGame = GameStatus.Win;
                         Dealer.StatusGame = GameStatus.Lose;
+                        continue;
                     }
 
                     if (CDS.CalculateCardsWeight(player.CardDeck) == CDS.CalculateCardsWeight(Dealer.CardDeck))
                     {
                         player.StatusGame = GameStatus.Draw;
                         Dealer.StatusGame = GameStatus.Draw;
-                        /* Need to give them their bets back, even if player doubled,
-                         * so add transaction, or create a new method,
-                         * like StatusDraw() or something. */
+                        continue;
                     }
 
                     if (CDS.CalculateCardsWeight(player.CardDeck) < CDS.CalculateCardsWeight(Dealer.CardDeck))
                     {
                         player.StatusGame = GameStatus.Lose;
                         Dealer.StatusGame = GameStatus.Win;
+                        continue;
                     }
-
                 }
-                
-                /* Maybe it's useless now. */
-                /* Yeah, everything is working good without it */
-                /* if (CDS.CalculateCardsWeight(player.CardDeck) > 21 && (CDS.CalculateCardsWeight(Dealer.CardDeck) < 22))
-                {
-                    Dealer.StatusGame = GameStatus.Win;
-                } */
 
-                /* Made DoDouble, it's working perfect, but i found an problem. There is no transaction if player's win*/
+
             }
         }
         private bool DoSurrender(CardPlayer player)

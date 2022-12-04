@@ -12,7 +12,7 @@ namespace Simple
         static void Main()
         {
             ICoreService Game = new CoreService();
-            Game.StartGame(2);
+            Game.StartGameAsync(2);
 
         }
 

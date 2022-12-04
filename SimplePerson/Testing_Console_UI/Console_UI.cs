@@ -10,7 +10,7 @@ namespace Simple.Testing_Console_UI
 {
     public class Console_UI : IConsole_UI
     {
-        public void ShowCardPlayerInfo(CardPlayer cardPlayer)
+        public async Task ShowCardPlayerInfo(CardPlayer cardPlayer)
         {
             ShowPlayerCardDeck(cardPlayer.CardDeck, cardPlayer.Person);
             if (cardPlayer.Person.Role != PersonRole.Dealer)
