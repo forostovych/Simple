@@ -11,5 +11,6 @@ namespace Simple.GamingTable
         int CalculateCardsWeight(CardDeck cardDeck);
         void DealCardsToPlayers(int numberOfCads);
         void DealCardToPlayer(CardPlayer player);
+        bool BlackJackCheck(CardPlayer player);
     }
 }

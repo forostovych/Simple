@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Simple.GamingTable.CardTableModel
 {
-    public class CardPlayer : ACardTableModel
+    public class CardPlayer : ACardPlayerModel
     {
 
     }

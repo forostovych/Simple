@@ -26,16 +26,13 @@ namespace Simple.GamingTable
             {
                 UserSelector NextMove = UserSelector.Unknown;
                 NextMove = AI_Move();
-
                 IsNotCompleted = CTS.DoActionByUserSelection(NextMove, Player);   //
             }
-
         }
 
         private UserSelector AI_Move()
         {
             ICardDeckService CDS = new CardDeckService();
-
             return CDS.CalculateCardsWeight(Player.CardDeck) < 17 ? UserSelector.Hit : UserSelector.Stand;
         }
     }

@@ -4,11 +4,7 @@
     public interface IPlayerBot
     {
 
-
-
         void NextMove();
-
-
 
     }
 

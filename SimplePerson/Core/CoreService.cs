@@ -9,18 +9,16 @@ namespace Simple.Core
     public class CoreService : ICoreService
     {
 
-
         private void InitializePlayersFromUserConsole()
         {
             IConsole_UI UI = new Console_UI();
             UI.ShowWelcomeMessage();
             int playersCount = UI.InitializePlayersCount();
             int startMoneyAmount = UI.InitializeStartMoneyAmount();
-            UI.InitializePlayersBet(startMoneyAmount);
+            //UI.InitializePlayersBet(startMoneyAmount);
             List<string> playerNames = UI.GetPlayerNames(playersCount);
             AddPlayersToTable(playerNames, startMoneyAmount);
         }
-
 
         private void AddPlayersToTable(List<string> playerNames, int startMoneyAmount)
         {
@@ -30,14 +28,11 @@ namespace Simple.Core
             }
             AddNewDealer("Dealer", startMoneyAmount * 10000);
         }
-
-
         private void AddNewDealer(string name, int startMoney)
         {
             ICardTableService cardTableService = new CardTableService();                                //      Add Interface TableService
             cardTableService.CreateCardPlayer(name, startMoney, PersonRole.Dealer);           //      Create Player One
         }
-
 
         public void AddNewPlayer(string name, decimal startMoney)
         {
@@ -45,24 +40,20 @@ namespace Simple.Core
             cardTableService.CreateCardPlayer(name, startMoney);                    //      Create Player One
         }
 
-
-        public async Task StartGameAsync(int countCards)
+        public void StartGameAsync(int countCards)
         {
             InitializePlayersFromUserConsole();                                    //          Create a game by User Input.  Select Count of players, money Amount fnd PlayerNames
             ICardTableService CTS = new CardTableService();
             ICardDeckService CDS = new CardDeckService();
+            bool isRunning = true;
 
-            while (true)
+            while (isRunning)
             {
-                CTS.RemoveBetFromPlayers();                         //          Take away the first bet
-                CDS.DealCardsToPlayers(countCards);                 //          Deal Cards to Players
-                CTS.AskAllPlayersNextMove(countCards);
+                CTS.RunBlackJackGame();
                 CTS.СountPointResult();
-
-                await CTS.GameOver();
+                isRunning = CTS.GameOver();
             }
         }
-
 
     }
 }

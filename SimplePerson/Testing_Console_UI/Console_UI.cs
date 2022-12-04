@@ -10,7 +10,7 @@ namespace Simple.Testing_Console_UI
 {
     public class Console_UI : IConsole_UI
     {
-        public async Task ShowCardPlayerInfo(CardPlayer cardPlayer)
+        public void ShowCardPlayerInfo(CardPlayer cardPlayer)
         {
             ShowPlayerCardDeck(cardPlayer.CardDeck, cardPlayer.Person);
             if (cardPlayer.Person.Role != PersonRole.Dealer)
@@ -319,34 +319,6 @@ namespace Simple.Testing_Console_UI
             return result;
         }
 
-        public void InitializePlayersBet(int startAmount)
-        {
-            int count = 0;
-            string inputResult = string.Empty;
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.Write("Please enter the bet amount: ");
-
-            while (true)
-            {
-                Console.ForegroundColor = ConsoleColor.Green;
-                inputResult = Console.ReadLine();
-                if (IsInteger(inputResult) && int.Parse(inputResult) <= (startAmount / 10))
-                {
-                    CardTable.DeskBet = int.Parse(inputResult);
-                    Console.WriteLine($"The bet amount is: [ {inputResult}$ ] - ok.\n");
-                    Console.ForegroundColor = ConsoleColor.White;
-                    break;
-                }
-                else
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("Erorr!");
-                    Console.ForegroundColor = ConsoleColor.White;
-                    Console.Write($"Please enter a betting amount between 1$ and {startAmount / 10}$: ");
-                }
-            }
-
-        }
         public List<string> InitializePlayerNames(int playersCount)
         {
             throw new NotImplementedException();
@@ -381,16 +353,58 @@ namespace Simple.Testing_Console_UI
 
             return count;
         }
+
         public bool GetFromUserStartNEwOrNo()
         {
-            Console.WriteLine("Start new game?" +
-                "\nYes = 1 / No = 2");
-            string result = Console.ReadLine();
-            if (result == "1")
-                return true;
-            else
-                return false;
+            return GetPlayerSelectionNextMove();
         }
 
+        private bool GetPlayerSelectionNextMove()
+        {
+            IBankService BS = new BankService();
+            Console.WriteLine("Start new game?" +
+            "\nYes = 1 / No = 2");
+
+            while (true)
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                string result = Console.ReadLine();
+
+                if (result == "1")
+                    return true;
+                if (result == "2")
+                    return false;
+            }
+        }
+
+        public decimal AskPlayerBet(CardPlayer player)
+        {
+            IBankService BS = new BankService();
+            decimal maximumBet = BS.GetMoneyAmount(player.Account);
+            string inputResult = string.Empty;
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write($"Please enter the bet amount [Maxuimum Bet: {maximumBet}]: ");
+
+            while (true)
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                inputResult = Console.ReadLine();
+                if (IsInteger(inputResult) && decimal.Parse(inputResult) <= maximumBet)
+                {
+                    Console.WriteLine($"The bet amount is: [ {inputResult}$ ] - ok.\n");
+                    Console.ForegroundColor = ConsoleColor.White;
+                    break;
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Erorr!");
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.Write($"Please enter a betting amount between 1$ and {maximumBet}$: ");
+                }
+            }
+
+            return decimal.Parse(inputResult);
+        }
     }
 }

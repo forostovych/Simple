@@ -15,11 +15,11 @@ namespace Simple.Testing_Console_UI
         void Clear();
         void ShowUIMessage(string text);
         UserSelector GetSelectorFromUser();
-        void InitializePlayersBet(int startAmount);
         void ShowWelcomeMessage();
         int InitializePlayersCount();
         List<string> GetPlayerNames(int playersCount);
         bool GetFromUserStartNEwOrNo();
-        Task ShowCardPlayerInfo(CardPlayer player);
+        void ShowCardPlayerInfo(CardPlayer player);
+        decimal AskPlayerBet(CardPlayer player);
     }
 }

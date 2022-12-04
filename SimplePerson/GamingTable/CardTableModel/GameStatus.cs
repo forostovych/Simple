@@ -11,6 +11,7 @@ namespace Simple.GamingTable.CardTableModel
         Unknown,        //      Game is runing
         Win,            //      Player is Win
         Lose,            //      Player is Lose
-        Draw
+        Draw,
+        BlackJack
     }
 }
