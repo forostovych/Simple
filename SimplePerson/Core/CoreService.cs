@@ -44,7 +44,6 @@ namespace Simple.Core
         {
             InitializePlayersFromUserConsole();                                    //          Create a game by User Input.  Select Count of players, money Amount fnd PlayerNames
             ICardTableService CTS = new CardTableService();
-            ICardDeckService CDS = new CardDeckService();
             bool isRunning = true;
 
             while (isRunning)
