@@ -40,7 +40,7 @@ namespace Simple.Core
             cardTableService.CreateCardPlayer(name, startMoney);                    //      Create Player One
         }
 
-        public void StartGameAsync(int countCards)
+        public void StartGame(int countCards)
         {
             InitializePlayersFromUserConsole();                                    //          Create a game by User Input.  Select Count of players, money Amount fnd PlayerNames
             ICardTableService CTS = new CardTableService();

@@ -4,7 +4,7 @@
     {
 
         void AddNewPlayer(string name, decimal startMoney);
-        void StartGameAsync(int countCardDeks);
+        void StartGame(int countCardDeks);
 
     }
 }
