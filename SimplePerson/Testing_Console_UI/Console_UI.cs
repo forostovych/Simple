@@ -16,9 +16,9 @@ namespace Simple.Testing_Console_UI
             if (cardPlayer.Person.Role != PersonRole.Dealer)
             {
                 ShowCardPlayerAccount(cardPlayer.Account);
+                ShowPlayerGameStatus(cardPlayer);
             }
 
-            ShowPlayerGameStatus(cardPlayer);
             ShowUIMessage("");
         }
 
@@ -290,6 +290,13 @@ namespace Simple.Testing_Console_UI
             Console.WriteLine(new string('=', 40));
             Console.ResetColor();
         }
+
+        public void ShowUIMessage(string text, ConsoleColor color)
+        {
+            Console.ForegroundColor = color;
+            Console.Write($"[{text}]");
+            Console.ResetColor();
+        }
         public UserSelector GetSelectorFromUser()
         {
             while (true)
@@ -383,7 +390,9 @@ namespace Simple.Testing_Console_UI
             decimal maximumBet = BS.GetMoneyAmount(player.Account);
             string inputResult = string.Empty;
             Console.ForegroundColor = ConsoleColor.White;
-            Console.Write($"Please enter the bet amount [Maxuimum Bet: {maximumBet}]: ");
+            Console.Write($"Enter the bet amount of ");
+            ShowUIMessage(player.Person.Name, ConsoleColor.Green);
+            Console.Write($" [Maxuimum Bet: {maximumBet}]: ");
 
             while (true)
             {

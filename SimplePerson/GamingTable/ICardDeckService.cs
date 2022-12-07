@@ -9,8 +9,7 @@ namespace Simple.GamingTable
         (CardDeck, CardDeck) MoveCards(CardDeck cardDeckFrom, CardDeck cardDeckTo, int countOfCards);
         bool BlackJackOverPointCheck(CardDeck playerCardDeck);
         int CalculateCardsWeight(CardDeck cardDeck);
-        void DealCardsToPlayers(int numberOfCads);
-        void DealCardToPlayer(CardPlayer player);
+        void DealCardToPlayer(CardPlayer cardPlayer, int cards);
         bool BlackJackCheck(CardPlayer player);
     }
 }

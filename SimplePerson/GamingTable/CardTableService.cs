@@ -137,7 +137,7 @@ namespace Simple.GamingTable
         private bool DoHit(CardPlayer player)
         {
             ICardDeckService CDS = new CardDeckService();
-            CDS.DealCardToPlayer(player);
+            CDS.DealCardToPlayer(player, 1);
             return true;
         }
         private void AddPlayerToDesk(CardPlayer cardPlayer)
@@ -240,7 +240,7 @@ namespace Simple.GamingTable
         private void DealCardsToPlayer(CardPlayer player)
         {
             ICardDeckService CDS = new CardDeckService();
-            CDS.DealCardsToPlayers(2);
+            CDS.DealCardToPlayer(player, 2);
         }
 
 

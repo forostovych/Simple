@@ -48,25 +48,10 @@ namespace Simple.GamingTable.CardDeckModel
             }
             return cardsWeight;
         }
-        public void DealCardToPlayer(CardPlayer cardPlayer)
+        public void DealCardToPlayer(CardPlayer cardPlayer, int cards)
         {
             ICardDeckService ICardDeck = new CardDeckService();                             //      Add Interface CardDeckService
-            (CardTable.TableCardDeck, cardPlayer.CardDeck) = ICardDeck.MoveCards(CardTable.TableCardDeck, cardPlayer.CardDeck, 1);
-        }
-        public void DealCardsToPlayers(int numberOfCards)
-        {
-            ICardDeckService ICardDeck = new CardDeckService();                             //      Add Interface CardDeckService
-            var TableCardDeck = CardTable.TableCardDeck = ICardDeck.GetCardDeck(6);
-
-            for (int i = 0; i < numberOfCards; i++)
-            {
-                foreach (var cardPlayer in CardTable.CardPlayers)
-                {
-                    (TableCardDeck, cardPlayer.CardDeck) = ICardDeck.MoveCards(TableCardDeck, cardPlayer.CardDeck, 1);
-                }
-
-                (TableCardDeck, CardTable.Dealer.CardDeck) = ICardDeck.MoveCards(TableCardDeck, CardTable.Dealer.CardDeck, 1);
-            }
+            (CardTable.TableCardDeck, cardPlayer.CardDeck) = ICardDeck.MoveCards(CardTable.TableCardDeck, cardPlayer.CardDeck, cards);
         }
         public bool BlackJackCheck(CardPlayer player) => CalculateCardsWeight(player.CardDeck) == 21;
         private int ConvertCardToCardWeightOverkill(Card card)
