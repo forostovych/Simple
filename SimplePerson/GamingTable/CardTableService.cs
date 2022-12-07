@@ -189,11 +189,12 @@ namespace Simple.GamingTable
         }
         public void RunBlackJackGame()
         {
+            ICardDeckService CDS = new CardDeckService();
             foreach (CardPlayer player in CardTable.CardPlayers)
             {
                 AskPlayerBet(player);
                 RemoveBetFromPlayer(player);
-                DealCardsToPlayer(player);
+                CDS.DealCardToPlayer(player, 2);
                 AskPlayerNextMove(player);
             }
 
