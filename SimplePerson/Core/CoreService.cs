@@ -42,9 +42,10 @@ namespace Simple.Core
 
         public void StartGame(int countCards)
         {
-            InitializePlayersFromUserConsole();                                    //          Create a game by User Input.  Select Count of players, money Amount fnd PlayerNames
-            ICardTableService CTS = new CardTableService();
+            InitializePlayersFromUserConsole();       
             ICardDeckService CDS = new CardDeckService();
+                                                                        //          Create a game by User Input.  Select Count of players, money Amount fnd PlayerNames
+            ICardTableService CTS = new CardTableService();
             bool isRunning = true;
 
             CardTable.TableCardDeck = CDS.GetCardDeck(6);
@@ -53,8 +54,10 @@ namespace Simple.Core
             {
                 CTS.RunBlackJackGame();
                 CTS.СountPointResult();
+                CTS.DuMoneyPay();
                 isRunning = CTS.GameOver();
             }
+
         }
 
     }

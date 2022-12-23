@@ -290,7 +290,6 @@ namespace Simple.Testing_Console_UI
             Console.WriteLine(new string('=', 40));
             Console.ResetColor();
         }
-
         public void ShowUIMessage(string text, ConsoleColor color)
         {
             Console.ForegroundColor = color;

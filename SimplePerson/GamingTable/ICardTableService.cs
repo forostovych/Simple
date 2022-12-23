@@ -14,5 +14,6 @@ namespace Simple.GamingTable
         void СountPointResult();
         bool GameOver();
         void RunBlackJackGame();
+        void DuMoneyPay();
     }
 }

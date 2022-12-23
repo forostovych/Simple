@@ -1,8 +1,8 @@
 ﻿using Simple.Bank;
-using Simple.Core;
 using Simple.GamingTable;
 using Simple.GamingTable.CardDeckModel;
 using Simple.GamingTable.CardTableModel;
+using Simple.GamingTable.MenuModel;
 using Simple.Testing_Console_UI;
 
 namespace Simple
@@ -11,9 +11,16 @@ namespace Simple
     {
         static void Main()
         {
+            MenuServicecs menu = new MenuServicecs();
+            menu.MainMenu();
+
+            /*
             ICoreService Game = new CoreService();
             Game.StartGame(2);
+            MenuServicecs<GameMenu> Menu = new MenuServicecs<GameMenu>();
 
+            Console.WriteLine(Menu.CreateEnumMenu());
+            */
         }
 
         private static void SimplStartScenario()
