@@ -4,7 +4,7 @@ using Simple.Testing_Console_UI;
 namespace Simple.GamingTable.MenuModel
 {
 
-    public class MenuServicecs
+    public class MenuServices
     {
 
         public void MainMenu()
@@ -27,6 +27,7 @@ namespace Simple.GamingTable.MenuModel
 
         private void SinglePlayerMenu()
         {
+
             Console_G_UI<MenuSinglePlayer> G_UI = new Console_G_UI<MenuSinglePlayer>();
             G_UI.Clear();
             G_UI.ShowUIMessage(nameof(MenuSinglePlayer).ToString());
@@ -37,6 +38,7 @@ namespace Simple.GamingTable.MenuModel
                 case MenuSinglePlayer.StartGame: SinglePlayerStartGameMenu(); return;
                 case MenuSinglePlayer.ExitToMainMenu: MainMenu(); return;
             }
+
         }
 
         private void SinglePlayerStartGameMenu()

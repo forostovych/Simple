@@ -67,6 +67,7 @@ namespace Simple.GamingTable
 
             foreach (var player in CardTable.CardPlayers)
             {
+
                 UI.ShowCardPlayerInfo(player);
                 player.CardDeck.Cards.Clear();
                 player.UserSelect = UserSelector.Unknown;
@@ -76,8 +77,10 @@ namespace Simple.GamingTable
                 {
                     return false;
                 }
-
+                 
             }
+
+
             //Thread.Sleep(3000);
             bool result = UI.GetFromUserStartNEwOrNo();
             CardTable.Dealer.CardDeck.Cards.Clear();
@@ -284,6 +287,12 @@ namespace Simple.GamingTable
                 if (player.StatusGame == GameStatus.Win)
                 {
                     result = BS.SendMoney(CardTable.Dealer.Person, player.Person, player.Bet * 2);
+                    UI.ShowUIMessage(result);
+                }
+
+                if (player.StatusGame == GameStatus.BlackJack)
+                {
+                    result = BS.SendMoney(CardTable.Dealer.Person, player.Person, player.Bet * 3);
                     UI.ShowUIMessage(result);
                 }
             }

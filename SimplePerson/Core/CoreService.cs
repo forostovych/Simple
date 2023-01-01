@@ -1,6 +1,7 @@
 ﻿using Simple.GamingTable;
 using Simple.GamingTable.CardDeckModel;
 using Simple.GamingTable.CardTableModel;
+using Simple.GamingTable.MenuModel;
 using Simple.PersonModel.PersonModels;
 using Simple.Testing_Console_UI;
 
@@ -57,6 +58,9 @@ namespace Simple.Core
                 CTS.DuMoneyPay();
                 isRunning = CTS.GameOver();
             }
+
+            MenuServices menu = new MenuServices();
+            menu.MainMenu();
 
         }
 
